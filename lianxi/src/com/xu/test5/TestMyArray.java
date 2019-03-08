@@ -31,7 +31,8 @@ public class TestMyArray {
         int index = ma.getIndex(0);
        System.out.println(index+"根据下标查找");
         //int i = ma.find(1);
-        //System.out.println(i);
+        System.out.println("5645897");
+
          ma.del(2);
          ma.showarray();
         ma.update(3,10);
