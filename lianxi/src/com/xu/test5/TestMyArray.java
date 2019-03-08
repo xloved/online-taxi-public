@@ -19,6 +19,29 @@ package com.xu.test5;
  * @since 1.0.0
  */
 public class TestMyArray {
-
+    public static void main(String[] args) {
+        MyArray ma=new MyArray(4);
+        ma.add(1);
+        ma.add(2);
+        ma.add(3);
+        ma.add(4);
+       // ma.add(5);
+        //ma.add(6);
+        ma.showarray();
+        int index = ma.getIndex(0);
+       System.out.println(index+"根据下标查找");
+        //int i = ma.find(1);
+        //System.out.println(i);
+         ma.del(2);
+         ma.showarray();
+        ma.update(3,10);
+        ma.showarray();
+        //System.out.println(ma.find(4)+"qqqqqs");
+        //System.out.println( ma.getLength());
+       //System.out.println(del+"---");
+        //System.out.println(ma.update(12,15));
+    }
 }
+
+
 
