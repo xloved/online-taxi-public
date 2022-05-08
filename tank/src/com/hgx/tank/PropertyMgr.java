@@ -2,7 +2,7 @@ package com.hgx.tank;
 
 import java.io.IOException;
 import java.util.Properties;
-
+//加载config文件
 public class PropertyMgr {
 
     static Properties props = new Properties();

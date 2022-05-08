@@ -1,6 +1,10 @@
 package com.hgx.tank;
 
-import com.sun.xml.internal.bind.v2.TODO;
+import com.hgx.tank.FMResponsibility.GameModel;
+import com.hgx.tank.FMResponsibility.GameObject;
+import com.hgx.tank.strategy.DefaultFireStrategy;
+import com.hgx.tank.strategy.FireStrategy;
+import com.hgx.tank.strategy.FourDirFireStrategy;
 
 import java.awt.*;
 import java.util.Random;
@@ -8,21 +12,41 @@ import java.util.Random;
 /**
  * tank类，记载坦克的属性和方法
  */
-public class Tank {
+public class Tank extends GameObject {
 
     private int x , y;//设置tank初始化坐标
     private Dir dir = Dir.DOWN;//tank初始方向
-    private static final int XSPEED = 3, YSPEED = 3;//tank每次移动速度
+    private static final int XSPEED = 4, YSPEED = 4;//tank每次移动速度
     //TODO：设置坦克初始化移动
     private boolean moving = true;//坦克静止
     private boolean living = true;//坦克是否活着
-    private TankFrame tf = null;
+
     public static int WIDTH = ResouceMgr.goodTankD.getWidth();
     public static int HEIGHT =ResouceMgr.goodTankD.getHeight();
     private Random random = new Random();//设置随机改变坦克方向
     private Group group = Group.BAO;//默认坦克是敌人
 
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
+
+    FireStrategy fireStrategy = new FourDirFireStrategy();
+
+    int oldX,oldY;
+
+    public int getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(int oldX) {
+        this.oldX = oldX;
+    }
+
+    public int getOldY() {
+        return oldY;
+    }
+
+    public void setOldY(int oldY) {
+        this.oldY = oldY;
+    }
 
     public boolean isMoving() {
         return moving;
@@ -64,11 +88,10 @@ public class Tank {
         this.group = group;
     }
 
-    public Tank(int x, int y, Dir dir, TankFrame tf, Group group) {
+    public Tank(int x, int y, Dir dir,  Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
         this.group = group;
 
         rect.x = this.x;
@@ -76,30 +99,35 @@ public class Tank {
         rect.width = WIDTH;
         rect.height = HEIGHT;
 
+        //区分坦克敌我的开火方式
+        if(group == Group.GOOD){
+           fireStrategy = new FourDirFireStrategy();
+        }else{
+            fireStrategy = new DefaultFireStrategy();
+        }
+        GameModel.getInstance().add(this);//在GameModel中new Tank的时候自动加入到GgameModel中
     }
 
     public void paint(Graphics graphics) {
-        //设置坐标和图形大小
-        /*Color color = graphics.getColor();
-        graphics.setColor(Color.ORANGE);
-        graphics.fillRect(x, y, 50, 50);
-        graphics.setColor(color);*/
-        if(!living) tf.tanks.remove(this) ; //坦克不存活,不画出坦克
+
+        if(!living) {
+            GameModel.getInstance().remove(this) ;//坦克不存活,不画出坦克
+        }
         switch(dir){
             case LEFT:
-                //graphics.drawImage(ResouceMgr.tankL, x, y, null);
+
                 graphics.drawImage(this.group == Group.GOOD? ResouceMgr.goodTankL : ResouceMgr.badTankL, x, y, null);
                 break;
             case UP:
-                //graphics.drawImage(ResouceMgr.tankU, x, y, null);
+
                 graphics.drawImage(this.group == Group.GOOD? ResouceMgr.goodTankU : ResouceMgr.badTankU, x, y, null);
                 break;
             case RIGHT:
-                //graphics.drawImage(ResouceMgr.tankR, x, y, null);
+
                 graphics.drawImage(this.group == Group.GOOD? ResouceMgr.goodTankR : ResouceMgr.badTankR, x, y, null);
                 break;
             case DOWN:
-                //graphics.drawImage(ResouceMgr.tankD, x, y, null);
+
                 graphics.drawImage(this.group == Group.GOOD? ResouceMgr.goodTankD : ResouceMgr.badTankD, x, y, null);
                 break;
         }
@@ -107,8 +135,29 @@ public class Tank {
 
     }
 
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
+    }
+
+    //返回坦克停止前的移动位置
+    public void back(){
+        x = oldX;
+        y = oldY;
+    }
+
     private void move() {
-        if(!moving) return ;
+        //记录坦克移动之前的位置
+        oldX = x;
+        oldY = y;
+
+        if(!moving)
+            return ;
         //循环tank方向
         switch (dir){
             case LEFT:
@@ -168,12 +217,10 @@ public class Tank {
         this.dir = Dir.values()[random.nextInt(4)];
     }
 
+    //坦克开火方法
     public void fire() {
-           int bX = this.x + Tank.WIDTH/2 - Bullet.WIDTH;
-           int bY = this.y + Tank.HEIGHT/2 - Bullet.HEIGHT/2;
-            tf.bulletList.add(new Bullet(bX,bY,this.dir,this.group,this.tf));
-            //进行坦克判断
-        //if(this.group == Group.GOOD) new Thread(()->new Audio("audio/tank_fire.wav").play()).start();
+        fireStrategy.fire(this);
+
     }
 
     public void die() {

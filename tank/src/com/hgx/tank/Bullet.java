@@ -1,29 +1,29 @@
 package com.hgx.tank;
 
+import com.hgx.tank.FMResponsibility.GameModel;
+import com.hgx.tank.FMResponsibility.GameObject;
+
 import java.awt.*;
 import java.util.Random;
 
 /**
  * 炮弹类
  */
-public class Bullet {
+public class Bullet extends GameObject {
 
-    private int x,y;
     private Dir dir;
-    private static final int SPEED = 8;
-    //private static final int WIDTH = 20,HEIGHT = 20;
+    private static final int SPEED = 7;
     //获取炮弹起始位置
     public static int WIDTH = ResouceMgr.bulletD.getWidth();
     public static int HEIGHT =ResouceMgr.bulletD.getHeight();
     //子弹是否存活
     private boolean living = true;
-    //引入tankFrame属性
-    private TankFrame tf = null;
     //封装坦克阵营类
     private Group group = Group.BAO;
-
     //定义坦克相交的位置
-    Rectangle rect = new Rectangle();
+    public Rectangle rect = new Rectangle();
+
+
 
     public boolean isLive() {
         return living;
@@ -41,28 +41,26 @@ public class Bullet {
         this.group = group;
     }
 
-    public Bullet(int x, int y, Dir dir, Group group, TankFrame tf) {
+    public Bullet(int x, int y, Dir dir, Group group) {
         this.x = x;
         this.y = y;
         this.dir = dir;
-        this.tf = tf;
         this.group = group;
 
         rect.x = this.x;
         rect.y = this.y;
         rect.width = WIDTH;
         rect.height = HEIGHT;
+
+        //设置tf
+        GameModel.getInstance().add(this);
     }
     //设置炮弹坐标和颜色
 
     public void paint(Graphics graphics){
         if(!living){
-            tf.bulletList.remove(this);
+            GameModel.getInstance().remove(this);
         }
-         /*Color color = graphics.getColor();//获取默认颜色
-         graphics.setColor(Color.red);//设置炮弹颜色为红色
-         graphics.fillOval(x,y,WIDTH,HEIGHT);//设置炮弹坐标
-         graphics.setColor(color);//回到默认颜色*/
         switch(dir){
             case LEFT:
                 graphics.drawImage(ResouceMgr.bulletL, x, y, null);
@@ -78,6 +76,16 @@ public class Bullet {
                 break;
         }
          move();
+    }
+
+    @Override
+    public int getWidth() {
+        return WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return HEIGHT;
     }
 
     private void move() {
@@ -105,34 +113,9 @@ public class Bullet {
         if(x <0 || y < 0 || x > TankFrame.GAME_WIDTH || y > TankFrame.GAME_HEIGHT){
             living =false;
         }
-
-
-
-    }
-    //碰撞检测方法
-    public void collideWith(Tank tank) {
-        if (this.group == tank.getGroup()) return;
-//        Rectangle rectangle1 = new Rectangle(this.x,this.y,WIDTH,HEIGHT);
-//        Rectangle rectangle2 = new Rectangle(tank.getX(),tank.getY(),Tank.WIDTH,Tank.HEIGHT);
-        //判断子弹和坦克是否相交   intersects是判断一个方块与另一个方块相交
-//        if(rectangle1.intersects(rectangle2)){
-//               tank.die();//坦克消失
-//               this.die();//子弹消失
-//            //让爆照在坦克中心爆照
-//            int eX = tank.getX() + Tank.WIDTH/2 - Explode.WIDTH;
-//            int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-//               tf.explodes.add(new Explode(eX,eY,tf));//坦克和子弹交互时发生爆炸
-//        }
-        if (rect.intersects(tank.rect)) {
-            tank.die();
-            this.die();
-            int eX = tank.getX() + Tank.WIDTH / 2 - Explode.WIDTH / 2;
-            int eY = tank.getY() + Tank.HEIGHT/2 - Explode.HEIGHT/2;
-            tf.explodes.add(new Explode(eX,eY,tf));//坦克和子弹交互时发生爆炸
-        }
     }
 
-    private void die() {
+    public void die() {
           this.living = false;
     }
 }

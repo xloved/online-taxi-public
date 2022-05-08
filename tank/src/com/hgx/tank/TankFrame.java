@@ -1,5 +1,7 @@
 package com.hgx.tank;
 
+import com.hgx.tank.FMResponsibility.GameModel;
+
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -18,15 +20,10 @@ import java.util.List;
  *  frame.addWindowListener 设置窗口可点击关闭
  */
 public class TankFrame extends Frame {
-    //设置初始化坦克坐标和移动方向
-    Tank tank = new Tank(200,400,Dir.DOWN,this,Group.GOOD);
-    //Tank tank1 = new Tank(200,400,Dir.DOWN,this);
-    List<Tank>   tanks = new ArrayList<>();
-    List<Bullet> bulletList = new ArrayList<Bullet>();//把子弹放进一个容器中
-    //Bullet bullet = new Bullet(300,300,Dir.DOWN);
+
+    GameModel gm = GameModel.getInstance();
     static final int GAME_WIDTH = 1080,GAME_HEIGHT = 960;
-    //Explode explode = new Explode(110,100,this);
-    List<Explode> explodes = new ArrayList<>();//把爆炸类放进容器中
+    Tank  tank = gm.getMainTank();
 
     public TankFrame() throws HeadlessException {
         setTitle("TANK WAR");
@@ -70,49 +67,7 @@ public class TankFrame extends Frame {
      */
     @Override
     public void paint(Graphics graphics) {
-        Color color = graphics.getColor();
-        graphics.setColor(Color.CYAN);
-        graphics.drawString("子弹的数量为："+bulletList.size(),10,50);
-        graphics.drawString("坦克的数量为："+tanks.size(),10,70);
-        graphics.drawString("爆炸的数量为："+explodes.size(),10,90);
-        graphics.setColor(color);
-        tank.paint(graphics);
-       //画出坦克可以连续发射子弹
-//      for(int i = 0; i<bulletList.size();i++){
-//                   bulletList.get(i).paint(graphics);
-//        }
-         //画出敌军的坦克数量
-        for(int i = 0; i < tanks.size(); i++){
-            tanks.get(i).paint(graphics);
-        }
-         //画出爆炸的数量
-        for(int i = 0; i < explodes.size(); i++){
-            explodes.get(i).paint(graphics);
-        }
-        //碰撞检测
-        for(int i = 0; i < bulletList.size(); i++){
-              for(int j = 0; j < tanks.size(); j++){
-                 bulletList.get(i).collideWith(tanks.get(j));
-              }
-        }
-        /*for (Bullet b: bulletList) {
-            b.paint(graphics);
-            bulletList.remove(b);
-        }*/
-       /* for(int i = 0 ; i < bulletList.size(); i++){
-            bulletList.get(i).paint(graphics);
-        }*/
-          //使用迭代器进行清除
-        for(Iterator<Bullet> iterator = bulletList.iterator(); iterator.hasNext();){
-                 Bullet b = iterator.next();
-                 if(!b.isLive()){
-                    iterator.remove();
-                 }
-                 b.paint(graphics);
-        }
-
-        //explode.paint(graphics);
-        //bullet.paint(graphics);单颗子弹
+        gm.paint(graphics);
     }
 
     //设置键盘监听事件
@@ -167,7 +122,7 @@ public class TankFrame extends Frame {
                         bD = false;
                         break;
                     case KeyEvent.VK_CONTROL:
-                        tank.fire();
+                        tank.fire();//开火
                         break;
                     default:
 
