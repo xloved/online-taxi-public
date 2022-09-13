@@ -17,7 +17,7 @@ public class NumberCodeController {
         double mathRandom = (Math.random()*9+1) * (Math.pow(10,size - 1));
         System.out.println(mathRandom);
         int resultInt = (int)mathRandom;
-        System.out.println(resultInt);
+        System.out.println("generator src code:"+resultInt);
 
         /*模拟获取验证码和执行状态
         JSONObject result =  new JSONObject();

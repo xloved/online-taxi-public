@@ -16,6 +16,7 @@ public class VerificationCodeController {
     @Resource
     private VerificationCodeService verificationCodeService;
 
+
     @GetMapping("/verification-code")
     public String VerificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO){
         //System.out.println(verificationCodeDTO.getPassengerPhone()+"123");
