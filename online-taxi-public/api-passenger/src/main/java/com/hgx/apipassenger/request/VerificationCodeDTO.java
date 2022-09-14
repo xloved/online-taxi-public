@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class VerificationCodeDTO {
-
+    //手机号码
     private String passengerPhone;//此处的值要于测试文档定义的值的大小写保持一致
 
 }

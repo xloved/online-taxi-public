@@ -12,6 +12,11 @@ public class ResponseResult<T> {
     private String message;
     private T data;
 
+    //默认成功返回的方法
+    public static<T> ResponseResult success(){
+        return new ResponseResult().setCode(CommonStatusEnum.SUCCESS.getCode()).setMessage(CommonStatusEnum.SUCCESS.getValue());
+    }
+
     /**
      * 成功响应前端传入的状态方法
      * @param data
