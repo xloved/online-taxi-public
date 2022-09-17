@@ -9,3 +9,10 @@ spring:
         server-addr: 127.0.0.1:8848
   application:
     name: api-passenger
+
+
+
+#配置redis
+  redis:
+    port: 6379
+    host: 192.168.70.130
