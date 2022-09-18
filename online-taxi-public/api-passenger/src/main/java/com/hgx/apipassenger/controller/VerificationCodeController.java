@@ -1,10 +1,9 @@
 package com.hgx.apipassenger.controller;
 
-import com.hgx.apipassenger.request.VerificationCodeDTO;
+
 import com.hgx.apipassenger.service.VerificationCodeService;
 import com.hgx.internalcomm.dto.ResponseResult;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.hgx.internalcomm.request.VerificationCodeDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;

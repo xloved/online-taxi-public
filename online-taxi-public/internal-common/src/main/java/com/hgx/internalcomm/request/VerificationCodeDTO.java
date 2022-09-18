@@ -1,9 +1,7 @@
-package com.hgx.apipassenger.request;
+package com.hgx.internalcomm.request;
 
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 //验证码请求类
 @Data
