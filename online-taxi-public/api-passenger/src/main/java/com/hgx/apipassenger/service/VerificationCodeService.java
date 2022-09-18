@@ -1,10 +1,12 @@
 package com.hgx.apipassenger.service;
 
 import com.hgx.apipassenger.remote.ServiceVerificationCodeClient;
+import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.NumberCodeResponse;
 import com.hgx.internalcomm.response.TokenResponse;
 import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,7 @@ public class VerificationCodeService {
 
         //存入redis
         //定义key
-        String key = verificationCodePrefix + passengerPhone;
+        String key = getByPassengerPhone(passengerPhone);
         //存入redis，设置过期时间为2分钟
         stringRedisTemplate.opsForValue().set(key,numberCode+"",2, TimeUnit.MINUTES);
 
@@ -46,11 +48,40 @@ public class VerificationCodeService {
         return  ResponseResult.success("");
     }
 
+    /**
+     * 根据手机号生成key
+     * @param passengerPhone
+     * @return
+     */
+    private String getByPassengerPhone(String passengerPhone){
 
-    public ResponseResult checkCode(String passsengerPhone,String verificationCode){
+        return verificationCodePrefix + passengerPhone;
+    }
 
-        System.out.println("根据手机号去redis读取验证码");
-        System.out.println("校验验证码");
+    /**
+     * 校验验证码
+     * @param passengerPhone
+     * @param verificationCode
+     * @return
+     */
+    public ResponseResult checkCode(String passengerPhone,String verificationCode){
+
+        //根据手机号去redis读取验证码
+        String key = getByPassengerPhone(passengerPhone);
+        //获取key
+        String redisCode = stringRedisTemplate.opsForValue().get(key);
+        System.out.println("从redis中获取的值："+redisCode);
+
+        //校验验证码
+        if(StringUtils.isBlank(redisCode)){//判断验证码是否为NULL
+            return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
+        }
+         //判断用户填写的验证码与redis中取到的验证码是否相等
+        if(!verificationCode.trim().equals(redisCode.trim())){//删除字符串的头尾空白符
+           return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
+        }
+
+
         System.out.println("判断原来是否有用户，然后进行相应处理");
         System.out.println("发送密码令牌");
 

@@ -3,8 +3,6 @@ package com.hgx.apipassenger.controller;
 import com.hgx.apipassenger.request.VerificationCodeDTO;
 import com.hgx.apipassenger.service.VerificationCodeService;
 import com.hgx.internalcomm.dto.ResponseResult;
-import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,10 +26,8 @@ public class VerificationCodeController {
 
         String passengerPhone = verificationCodeDTO.getPassengerPhone();
         String verificationCode = verificationCodeDTO.getVerificationCode();
-        System.out.println("手机号为："+passengerPhone+"\n"+"验证码是："+verificationCode);
+        System.out.println("手机号为："+passengerPhone+","+"验证码是："+verificationCode);
 
         return verificationCodeService.checkCode(passengerPhone,verificationCode);
-
-
     }
 }

@@ -9,6 +9,9 @@ import lombok.Getter;
  */
 public enum CommonStatusEnum {
 
+    //定义验证码错误
+    VERIFICATION_CODE_ERRROR(1099,"验证码不正确"),
+
     //定义返回成功
     SUCCESS(1,"success"),
     //定义返回失败
