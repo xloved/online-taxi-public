@@ -23,6 +23,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!--引入mybatisplus-->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.4.3.1</version>
+        </dependency>
+
+        <!--引入mySql-->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
         <!--引入nacos-->
         <dependency>
             <groupId>com.alibaba.cloud</groupId>

@@ -3,6 +3,7 @@ package com.hgx.apipassenger.service;
 import com.hgx.apipassenger.remote.ServiceVerificationCodeClient;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.request.VerificationCodeDTO;
 import com.hgx.internalcomm.response.NumberCodeResponse;
 import com.hgx.internalcomm.response.TokenResponse;
 import net.sf.json.JSONObject;
@@ -18,7 +19,11 @@ import java.util.concurrent.TimeUnit;
 public class VerificationCodeService {
 
     @Resource
-    ServiceVerificationCodeClient serviceVerificationCodeClient;
+    private ServiceVerificationCodeClient serviceVerificationCodeClient;
+
+    @Resource
+    private ServicePassengerUserClient servicePassengerUserClient;
+
     //定义乘客验证码的前缀
     private String verificationCodePrefix = "passgenger-verfication-code-";
 
@@ -76,9 +81,9 @@ public class VerificationCodeService {
         if(StringUtils.isBlank(redisCode)){//判断验证码是否为NULL
             return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
         }
-         //判断用户填写的验证码与redis中取到的验证码是否相等
+        //判断用户填写的验证码与redis中取到的验证码是否相等
         if(!verificationCode.trim().equals(redisCode.trim())){//删除字符串的头尾空白符
-           return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
+            return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
         }
 
 

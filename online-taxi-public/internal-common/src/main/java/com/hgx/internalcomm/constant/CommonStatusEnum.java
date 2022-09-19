@@ -8,6 +8,8 @@ import lombok.Getter;
  * 定义返回值状态通用类
  */
 public enum CommonStatusEnum {
+    //定义验证码错误
+    VERIFICATION_CODE_ERRROR(1099,"验证码不正确"),
 
     //定义验证码错误
     VERIFICATION_CODE_ERRROR(1099,"验证码不正确"),
