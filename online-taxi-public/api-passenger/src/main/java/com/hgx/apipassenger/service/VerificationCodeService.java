@@ -2,6 +2,7 @@ package com.hgx.apipassenger.service;
 
 import com.hgx.apipassenger.remote.ServiceVerificationCodeClient;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
+import com.hgx.internalcomm.constant.TokenConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.VerificationCodeDTO;
 import com.hgx.internalcomm.response.NumberCodeResponse;
@@ -92,7 +93,7 @@ public class VerificationCodeService {
 
         //响应token
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken("token value");
+        tokenResponse.setToken(token);
 
         return ResponseResult.success(tokenResponse);
     }
