@@ -74,6 +74,7 @@ public class VerificationCodeService {
 
         //根据手机号去redis读取验证码
         String key = getByPassengerPhone(passengerPhone);
+        System.out.println("shoujihao============"+key);
         //获取key
         String redisCode = stringRedisTemplate.opsForValue().get(key);
         System.out.println("从redis中获取的值："+redisCode);
