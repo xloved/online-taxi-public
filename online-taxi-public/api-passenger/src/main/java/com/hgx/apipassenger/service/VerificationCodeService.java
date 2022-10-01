@@ -28,6 +28,9 @@ public class VerificationCodeService {
     //定义乘客验证码的前缀
     private String verificationCodePrefix = "passgenger-verfication-code-";
 
+    //定义token的前缀
+    private String tokenPrefix = "tokenBy-";
+
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
@@ -65,6 +68,17 @@ public class VerificationCodeService {
     }
 
     /**
+     * 根据手机号和身份标识生成token的key
+     * @param passengerPhone
+     * @param identity
+     * @return
+     */
+    private String getByToken(String passengerPhone,String identity){
+        return "tokenPrefix"+passengerPhone+"-"+identity;
+
+    }
+
+    /**
      * 校验验证码
      * @param passengerPhone
      * @param verificationCode
@@ -95,6 +109,10 @@ public class VerificationCodeService {
         //响应token
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setToken(token);
+
+        //把token存储到redis中,设定过期时间为30天
+        String tokenKey = getByToken(passengerPhone,TokenConstantEnum.IDENTITY_PASSENGER);
+        stringRedisTemplate.opsForValue().set(tokenKey,token,30,TimeUnit.DAYS);
 
         return ResponseResult.success(tokenResponse);
     }

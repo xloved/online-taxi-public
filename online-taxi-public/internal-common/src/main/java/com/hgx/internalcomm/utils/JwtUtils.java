@@ -32,7 +32,7 @@ public class JwtUtils {
         //获取当前时间
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE,30);//设置过期时间
-        Date date = calendar.getTime();//具体的到期时间点时间
+        //Date date = calendar.getTime();//具体的到期时间点时间
         JWTCreator.Builder builder = JWT.create();//生成builder
         //使用lamde表达式迭代map
         map.forEach((k,v)-> {
@@ -40,7 +40,7 @@ public class JwtUtils {
         });
 
         //整合过期时间
-        builder.withExpiresAt(date);
+        //builder.withExpiresAt(date);
 
         //生成token
         String singer = builder.sign(Algorithm.HMAC256(SING));
