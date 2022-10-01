@@ -25,12 +25,6 @@ public class VerificationCodeService {
     @Resource
     private ServicePassengerUserClient servicePassengerUserClient;
 
-    //定义乘客验证码的前缀
-    private String verificationCodePrefix = "passgenger-verfication-code-";
-
-    //定义token的前缀
-    private String tokenPrefix = "tokenBy-";
-
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
@@ -57,26 +51,7 @@ public class VerificationCodeService {
         return  ResponseResult.success("");
     }
 
-    /**
-     * 根据手机号生成key
-     * @param passengerPhone
-     * @return
-     */
-    private String getByPassengerPhone(String passengerPhone){
 
-        return verificationCodePrefix + passengerPhone;
-    }
-
-    /**
-     * 根据手机号和身份标识生成token的key
-     * @param passengerPhone
-     * @param identity
-     * @return
-     */
-    private String getByToken(String passengerPhone,String identity){
-        return "tokenPrefix"+passengerPhone+"-"+identity;
-
-    }
 
     /**
      * 校验验证码
@@ -87,7 +62,7 @@ public class VerificationCodeService {
     public ResponseResult checkCode(String passengerPhone,String verificationCode){
 
         //根据手机号去redis读取验证码
-        String key = getByPassengerPhone(passengerPhone);
+        String key = RedisPrefixUtils.getByPassengerPhone(passengerPhone);
         System.out.println("shoujihao============"+key);
         //获取key
         String redisCode = stringRedisTemplate.opsForValue().get(key);
@@ -111,7 +86,7 @@ public class VerificationCodeService {
         tokenResponse.setToken(token);
 
         //把token存储到redis中,设定过期时间为30天
-        String tokenKey = getByToken(passengerPhone,TokenConstantEnum.IDENTITY_PASSENGER);
+        String tokenKey = RedisPrefixUtils.getByToken(passengerPhone,TokenConstantEnum.IDENTITY_PASSENGER);
         stringRedisTemplate.opsForValue().set(tokenKey,token,30,TimeUnit.DAYS);
 
         return ResponseResult.success(tokenResponse);
