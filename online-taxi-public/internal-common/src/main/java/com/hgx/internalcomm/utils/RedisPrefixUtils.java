@@ -24,8 +24,8 @@ public class RedisPrefixUtils {
      * @param identity
      * @return
      */
-    public static String getByToken(String passengerPhone,String identity){
-        return "tokenPrefix"+passengerPhone+"-"+identity;
+    public static String getByToken(String passengerPhone,String identity,String tokenType){
+        return "tokenPrefix"+passengerPhone+"-"+identity +"-"+tokenType;
 
     }
 }

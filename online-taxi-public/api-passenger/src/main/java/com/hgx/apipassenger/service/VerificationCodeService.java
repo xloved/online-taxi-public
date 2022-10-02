@@ -2,6 +2,7 @@ package com.hgx.apipassenger.service;
 
 import com.hgx.apipassenger.remote.ServiceVerificationCodeClient;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
+import com.hgx.internalcomm.constant.IdentityConstantEnum;
 import com.hgx.internalcomm.constant.TokenConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.VerificationCodeDTO;
@@ -83,11 +84,15 @@ public class VerificationCodeService {
 
         //响应token
         TokenResponse tokenResponse = new TokenResponse();
-        tokenResponse.setToken(token);
+        tokenResponse.setAccessToken(accessToken);
+        tokenResponse.setRefreshToken(refreshToken);
 
         //把token存储到redis中,设定过期时间为30天
-        String tokenKey = RedisPrefixUtils.getByToken(passengerPhone,TokenConstantEnum.IDENTITY_PASSENGER);
-        stringRedisTemplate.opsForValue().set(tokenKey,token,30,TimeUnit.DAYS);
+        String accessTokenKey = RedisPrefixUtils.getByToken(passengerPhone,IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.ACCESS_TOKEN_TYPE);
+        stringRedisTemplate.opsForValue().set(accessTokenKey,accessToken,30,TimeUnit.DAYS);
+
+        String refreshTokenKey = RedisPrefixUtils.getByToken(passengerPhone,IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.REFRESH_TOKEN_TYPE);
+        stringRedisTemplate.opsForValue().set(refreshTokenKey,refreshToken,31,TimeUnit.DAYS);
 
         return ResponseResult.success(tokenResponse);
     }
