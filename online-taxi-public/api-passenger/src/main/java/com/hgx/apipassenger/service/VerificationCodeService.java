@@ -91,8 +91,10 @@ public class VerificationCodeService {
         String accessTokenKey = RedisPrefixUtils.getByToken(passengerPhone,IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.ACCESS_TOKEN_TYPE);
         stringRedisTemplate.opsForValue().set(accessTokenKey,accessToken,30,TimeUnit.DAYS);
 
+
         String refreshTokenKey = RedisPrefixUtils.getByToken(passengerPhone,IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.REFRESH_TOKEN_TYPE);
         stringRedisTemplate.opsForValue().set(refreshTokenKey,refreshToken,31,TimeUnit.DAYS);
+
 
         return ResponseResult.success(tokenResponse);
     }

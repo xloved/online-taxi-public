@@ -27,6 +27,9 @@ public class JwtUtils {
     //定义token类型
     private static final String JWT_KEY_TOKEN_TYPE = "tokenType";
 
+    //定义token的过期时间
+    private static final String JWT_KEY_TOKEN_DATE = "tokenDateTime";
+
     //生成token
     public static String generatorToken(String passengerPhone,String identity,String tokenType){
 
@@ -35,11 +38,11 @@ public class JwtUtils {
         map.put(JWT_KEY_IDENTITY,identity);
         map.put(JWT_KEY_TOKEN_TYPE,tokenType);
         System.out.println(passengerPhone);
-        //获取当前时间
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE,30);//设置过期时间
-        //Date date = calendar.getTime();//具体的到期时间点时间
+         //防止生成的token一样
+        map.put(JWT_KEY_TOKEN_DATE,Calendar.getInstance().getTime().toString());
+
         JWTCreator.Builder builder = JWT.create();//生成builder
+
         //使用lamde表达式迭代map
         map.forEach((k,v)-> {
                 builder.withClaim(k,v);
@@ -81,7 +84,7 @@ public class JwtUtils {
         }catch (Exception e){
         }
 
-        return null;
+        return tokenResult;
     }
 
     //测试
