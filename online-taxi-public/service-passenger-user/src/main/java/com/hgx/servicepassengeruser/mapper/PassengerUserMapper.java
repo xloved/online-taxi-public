@@ -1,7 +1,8 @@
 package com.hgx.servicepassengeruser.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hgx.servicepassengeruser.dto.PassengerUser;
+import com.hgx.internalcomm.dto.PassengerUser;
+
 import org.apache.ibatis.annotations.Mapper;
 
 

@@ -14,6 +14,9 @@ public enum CommonStatusEnum {
     //token类提示，1100-1199
     TOKEN_ERROR(1199,"token错误"),
 
+    //user类提示，1200-1299
+    USER_MESS_ERROR(1299,"用户不存在"),
+
     //定义验证码错误
     VERIFICATION_CODE_ERRROR(1099,"验证码不正确"),
 
