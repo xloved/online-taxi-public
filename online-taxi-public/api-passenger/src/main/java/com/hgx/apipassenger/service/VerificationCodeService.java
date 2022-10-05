@@ -1,5 +1,7 @@
 package com.hgx.apipassenger.service;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
+import com.hgx.apipassenger.remote.ServicePassengerUserClient;
 import com.hgx.apipassenger.remote.ServiceVerificationCodeClient;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.constant.IdentityConstantEnum;
@@ -8,8 +10,8 @@ import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.VerificationCodeDTO;
 import com.hgx.internalcomm.response.NumberCodeResponse;
 import com.hgx.internalcomm.response.TokenResponse;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringUtils;
+import com.hgx.internalcomm.utils.JwtUtils;
+import com.hgx.internalcomm.utils.RedisPrefixUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +45,8 @@ public class VerificationCodeService {
 
         //存入redis
         //定义key
-        String key = getByPassengerPhone(passengerPhone);
+        String key = RedisPrefixUtils.verificationCodePrefix + passengerPhone;
+        System.out.println("phone------------------"+key);
         //存入redis，设置过期时间为2分钟
         stringRedisTemplate.opsForValue().set(key,numberCode+"",2, TimeUnit.MINUTES);
 
@@ -54,12 +57,6 @@ public class VerificationCodeService {
 
 
 
-    /**
-     * 校验验证码
-     * @param passengerPhone
-     * @param verificationCode
-     * @return
-     */
     public ResponseResult checkCode(String passengerPhone,String verificationCode){
 
         //根据手机号去redis读取验证码
@@ -78,9 +75,14 @@ public class VerificationCodeService {
             return ResponseResult.fail(CommonStatusEnum.VERIFICATION_CODE_ERRROR.getCode(),CommonStatusEnum.VERIFICATION_CODE_ERRROR.getValue());
         }
 
+        //判断原来是否有用户，然后进行相应处理"
+        VerificationCodeDTO verificationCodeDTO = new VerificationCodeDTO();
+        verificationCodeDTO.setPassengerPhone(passengerPhone);
+        servicePassengerUserClient.loginOrRegister(verificationCodeDTO);
 
-        System.out.println("判断原来是否有用户，然后进行相应处理");
-        System.out.println("发送密码令牌");
+        //发送密码令牌,使用常量或者枚举来进行用户/司机的身份检验
+        String  accessToken = JwtUtils.generatorToken(passengerPhone, IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.ACCESS_TOKEN_TYPE);
+        String  refreshToken = JwtUtils.generatorToken(passengerPhone,IdentityConstantEnum.IDENTITY_PASSENGER,TokenConstantEnum.REFRESH_TOKEN_TYPE);
 
         //响应token
         TokenResponse tokenResponse = new TokenResponse();

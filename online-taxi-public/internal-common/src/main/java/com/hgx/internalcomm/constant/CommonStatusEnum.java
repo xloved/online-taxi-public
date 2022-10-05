@@ -17,9 +17,6 @@ public enum CommonStatusEnum {
     //user类提示，1200-1299
     USER_MESS_ERROR(1299,"用户不存在"),
 
-    //定义验证码错误
-    VERIFICATION_CODE_ERRROR(1099,"验证码不正确"),
-
     //定义返回成功
     SUCCESS(1,"success"),
     //定义返回失败
