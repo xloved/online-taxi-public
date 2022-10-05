@@ -20,20 +20,15 @@ public class UserService {
     @Resource
     PassengerUserMapper passengerUserMapper;
 
-    @Resource
-    PassengerUserMapper passengerUserMapper;
-
     //用户登录与注册
     public ResponseResult loginOrRegister(String passengerPhone){
 
-        System.out.println("user serice被调用，手机号"+passengerPgone);
-        //根据手机号查询用户信息
+        System.out.println("user serice被调用，手机号"+passengerPhone);
+        //根据手机号查询用户
         Map<String,Object> map = new HashMap<>();
-        map.put("passenger_phone",passengerPgone);
-        List<PassengerUser> passengerUsers = passengerUserMapper.selectByMap(map);
-        System.out.println(passengerUsers.size()==0?"无记录":passengerUsers.get(0).getPassengerPhone());
-
-
+        map.put("passenger_phone",passengerPhone);
+        List<PassengerUser>  passengerUsers = passengerUserMapper.selectByMap(map);
+        System.out.println(passengerUsers.size() == 0 ?"无记录":passengerUsers.get(0).getPassengerPhone());
         //判断用户是否已存在
         if(passengerUsers.size() == 0){
             //如果不存在插入用户信息

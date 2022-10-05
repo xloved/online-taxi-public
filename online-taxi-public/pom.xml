@@ -49,19 +49,14 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!--引入mybatisplus-->
+        <!--引入jwt-->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.3.1</version>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.14.0</version>
         </dependency>
 
-        <!--引入mySql-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-    </dependencies>
+</dependencies>
 
     <!--统一springcloudAlibaba & springcloud 的版本约定-->
     <dependencyManagement>
