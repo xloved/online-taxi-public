@@ -4,10 +4,8 @@ import com.hgx.apipassenger.remote.ServicePassengerUserClient;
 import com.hgx.internalcomm.dto.PassengerUser;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.dto.TokenResult;
-import com.hgx.internalcomm.request.VerificationCodeDTO;
 import com.hgx.internalcomm.utils.JwtUtils;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +26,7 @@ public class UserService {
         log.info("手机号为："+passengerPhone);
         //根据手机号查询用户信息
         ResponseResult<PassengerUser> phone = servicePassengerUserClient.getUserByPhone(passengerPhone);
+
         return ResponseResult.success(phone.getData());
     }
 }

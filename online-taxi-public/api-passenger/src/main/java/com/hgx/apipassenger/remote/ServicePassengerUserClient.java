@@ -1,6 +1,7 @@
 package com.hgx.apipassenger.remote;
 
 
+import com.hgx.internalcomm.dto.PassengerUser;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.VerificationCodeDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,6 +17,6 @@ public interface ServicePassengerUserClient {
     public ResponseResult loginOrRegister(@RequestBody VerificationCodeDTO verificationCodeDTO);
 
     @RequestMapping (method = RequestMethod.GET,value="/selectuser/{phone}")
-    public ResponseResult getUserByPhone(@PathVariable("phone") String passengerPhone);
+    public ResponseResult<PassengerUser> getUserByPhone(@PathVariable("phone") String passengerPhone);
 
 }

@@ -31,7 +31,7 @@ public class UserController {
     @GetMapping("/selectuser/{phone}")
     public ResponseResult getSelectUser(@PathVariable("phone") String passengerPhone){
 
-        System.out.println("手机号为"+passengerPhone);
+        System.out.println("service-passenger-user：phone："+passengerPhone);
         return userService.getBySelectUser(passengerPhone);
 
     }
