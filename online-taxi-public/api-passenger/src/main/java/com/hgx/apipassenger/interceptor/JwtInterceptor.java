@@ -46,6 +46,7 @@ public class JwtInterceptor implements HandlerInterceptor {
              //拼接key
              String passengerPhone = tokenResult.getPassengerPhone();
              String identity = tokenResult.getIdentity();
+
              String tokenKey = RedisPrefixUtils.getByToken(passengerPhone, identity, TokenConstantEnum.ACCESS_TOKEN_TYPE);
 
              //从redis中取出accessToken进行校验

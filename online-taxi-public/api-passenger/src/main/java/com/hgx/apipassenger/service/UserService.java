@@ -15,7 +15,7 @@ import javax.annotation.Resource;
 public class UserService {
 
     @Resource
-    private ServicePassengerUserClient servicePassengerUserClient;
+     ServicePassengerUserClient servicePassengerUserClient;
 
     public ResponseResult getUserByAccessToken(String accessToken){
 
