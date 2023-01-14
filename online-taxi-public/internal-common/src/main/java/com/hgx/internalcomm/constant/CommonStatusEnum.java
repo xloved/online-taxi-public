@@ -16,7 +16,8 @@ public enum CommonStatusEnum {
 
     //user类提示，1200-1299
     USER_MESS_ERROR(1299,"用户不存在"),
-
+    //计价规则，1300-1399
+    PRICE_RULE_ERROR(1300,"计价规则不存在"),
     //定义返回成功
     SUCCESS(1,"success"),
     //定义返回失败
