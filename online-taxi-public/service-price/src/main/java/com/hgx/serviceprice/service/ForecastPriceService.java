@@ -6,6 +6,7 @@ import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.ForecastPriceDTO;
 import com.hgx.internalcomm.response.DirectionResponse;
 import com.hgx.internalcomm.response.ForecastPriceResponse;
+import com.hgx.internalcomm.utils.BigDecimalUtils;
 import com.hgx.serviceprice.mapper.PriceRuleMapper;
 import com.hgx.serviceprice.remote.ServiceMapClients;
 import lombok.extern.slf4j.Slf4j;
@@ -79,43 +80,56 @@ public class ForecastPriceService {
      * @return
      */
     private double getPrice(Integer distance, Integer duration, PriceRule priceRule){
-        BigDecimal price = new BigDecimal(0);
+        //BigDecimal price = new BigDecimal(0);
+        double price = 0;
+
 
         // 起步价
         double startFare = priceRule.getStartFare();
-        BigDecimal startFareDecimal = new BigDecimal(startFare);
-        price = price.add(startFareDecimal);
+        price = BigDecimalUtils.add(price, startFare);
+//        BigDecimal startFareDecimal = new BigDecimal(startFare);
+//        price = price.add(startFareDecimal);
         // 里程费
         // 获取总里程 m
-        BigDecimal distanceDecimal = new BigDecimal(distance);
-        // 总里程 km
-        BigDecimal distanceMileDecimal = distanceDecimal.divide(new BigDecimal(1000), 2, BigDecimal.ROUND_HALF_UP);
+        double distanceMile = BigDecimalUtils.divide(distance, 1000);
+
+//        BigDecimal distanceDecimal = new BigDecimal(distance);
+//        // 总里程 km
+//        BigDecimal distanceMileDecimal = distanceDecimal.divide(new BigDecimal(1000), 2, BigDecimal.ROUND_HALF_UP);
         // 起步里程
-        Integer startMile = priceRule.getStartMile();
-        BigDecimal startMileDecimal = new BigDecimal(startMile);
-        double distanceSubstract = distanceMileDecimal.subtract(startMileDecimal).doubleValue();
+//        Integer startMile = priceRule.getStartMile();
+//        BigDecimal startMileDecimal = new BigDecimal(startMile);
+        double startMile = priceRule.getStartMile();
+        double distanceSubstract =BigDecimalUtils.substract(distanceMile, startMile);
+
         //最终收费的里程数 km
         Double mile = distanceSubstract < 0?0:distanceSubstract;
-        BigDecimal mileDecimal =  new BigDecimal(mile);
+//        BigDecimal mileDecimal =  new BigDecimal(mile);
         //计程单价 元/km
         Double unitPricePerMile = priceRule.getUnitPricePerMile();
-        BigDecimal unitPricePerMileDecimal = new BigDecimal(unitPricePerMile);
+
+//        BigDecimal unitPricePerMileDecimal = new BigDecimal(unitPricePerMile);
         //里程价格
-        BigDecimal mileFare = mileDecimal.multiply(unitPricePerMileDecimal).setScale(2, BigDecimal.ROUND_HALF_UP);
-        price = price.add(mileFare);
+        double mailFare = BigDecimalUtils.multiply(mile, unitPricePerMile);
+//        BigDecimal mileFare = mileDecimal.multiply(unitPricePerMileDecimal).setScale(2, BigDecimal.ROUND_HALF_UP);
+        price = BigDecimalUtils.add(price,mailFare);
 
         // 时长费
-        BigDecimal time = new BigDecimal(duration);
+//        BigDecimal time = new BigDecimal(duration);
         // 时长的分钟数
-        BigDecimal timeDecimal = time.divide(new BigDecimal(60), 2, BigDecimal.ROUND_HALF_UP);
+//        BigDecimal timeDecimal = time.divide(new BigDecimal(60), 2, BigDecimal.ROUND_HALF_UP);
+        double timeMinute = BigDecimalUtils.divide(duration, 60);
         // 计时单价
         Double unitPricePerMinute = priceRule.getUnitPricePerMinute();
-        BigDecimal unitPricePerMinuteDecimal = new BigDecimal(unitPricePerMinute);
+//        BigDecimal unitPricePerMinuteDecimal = new BigDecimal(unitPricePerMinute);
         // 时长费用
-        BigDecimal timeFare = timeDecimal.multiply(unitPricePerMinuteDecimal);
-        price = price.add(timeFare).setScale(2, BigDecimal.ROUND_HALF_UP);
+        double timeFare = BigDecimalUtils.multiply(timeMinute, unitPricePerMinute);
 
-        return price.doubleValue();
+        price = BigDecimalUtils.add(price, timeFare);
+        BigDecimal priceBigDecimal = BigDecimal.valueOf(price);
+        priceBigDecimal = priceBigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        return priceBigDecimal.doubleValue();
     }
 
 //    public static void main(String[] args) {//测试价格

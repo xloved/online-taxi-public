@@ -21,6 +21,10 @@
         <module>service-passenger-user</module>
         <module>service-price</module>
         <module>service-map</module>
+        <module>service-driver-user</module>
+        <module>api-boss</module>
+        <module>api-driver</module>
+        <module>service-verificationcode</module>
     </modules>
     <packaging>pom</packaging>
 
@@ -44,6 +48,7 @@
             <version>2.4</version>
             <classifier>jdk15</classifier>
         </dependency>
+
         <!--引入共同服务-->
         <dependency>
             <groupId>com.hgx</groupId>

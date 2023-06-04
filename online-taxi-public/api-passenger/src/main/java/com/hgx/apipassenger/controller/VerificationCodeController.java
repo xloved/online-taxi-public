@@ -30,7 +30,5 @@ public class VerificationCodeController {
         System.out.println("手机号为："+passengerPhone+"\n"+"验证码是："+verificationCode);
 
         return verificationCodeService.checkCode(passengerPhone,verificationCode);
-
-
     }
 }
