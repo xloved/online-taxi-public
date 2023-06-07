@@ -6,11 +6,8 @@ import com.hgx.internalcomm.dto.DicDistrict;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.servicemap.mapper.DicdistrictMapper;
 import com.hgx.servicemap.remote.MapDicDistrictClient;
-import lombok.val;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-import net.sf.json.JsonConfig;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,6 +25,11 @@ public class DicDistrictService {
     @Resource
     private DicdistrictMapper dicdistrictMapper;
 
+    /**
+     * 根据关键字查询行政区域
+     * @param keywords
+     * @return
+     */
     public ResponseResult initDistrict(String keywords){
 
         // 拼装请求的URL
@@ -82,7 +84,6 @@ public class DicDistrictService {
                         if (districtLevel.equals(AmapConfigConstants.STREET)) {
                             continue;
                         }
-
                         insertDicDistrict(districtAddressCode, districtAddressName, districtParentAddressCode, districtLevel);
                     }
                 }
@@ -93,7 +94,7 @@ public class DicDistrictService {
         return ResponseResult.success();
     }
 
-    // 数据库对象
+    // 插入数据库对象方法
     public void insertDicDistrict(String addressCode, String addressName, String parentAdressCode, String level){
         DicDistrict dicDistrict = new DicDistrict();
         dicDistrict.setAddressCode(addressCode);

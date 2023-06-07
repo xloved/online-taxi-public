@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务实现类
+ *  司机工作状态
  * </p>
  *
  * @author huogaoxu
@@ -23,12 +23,22 @@ public class DriverUserWorkStatusService {
     @Resource
     private DriverUserWorkStatusMapper driverUserWorkStatusMapper;
 
+    /**
+     * 修改当前司机的工作状态
+     * @param driverId
+     * @param workStatus
+     * @return
+     */
     public ResponseResult updateWorkerStatus(Long driverId, Integer workStatus ){
+        // 根据driverID查询当前司机信息
         HashMap<String, Object> map = new HashMap<>();
         map.put("driver_id",driverId);
         List<DriverUserWorkStatus> driverUserWorkStatuses = driverUserWorkStatusMapper.selectByMap(map);
+        // 获取查询到的第一条数据
         DriverUserWorkStatus driverUserWorkStatus = driverUserWorkStatuses.get(0);
+        // 设置当前司机的状态
         driverUserWorkStatus.setWorkStatus(workStatus);
+        // 修改数据库
         driverUserWorkStatusMapper.updateById(driverUserWorkStatus);
 
         return ResponseResult.success("");

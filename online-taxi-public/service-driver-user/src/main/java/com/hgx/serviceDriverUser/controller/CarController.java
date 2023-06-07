@@ -4,10 +4,7 @@ package com.hgx.serviceDriverUser.controller;
 import com.hgx.internalcomm.dto.Car;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.serviceDriverUser.service.CarService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -35,6 +32,17 @@ public class CarController {
     public ResponseResult addCar(@RequestBody Car car){
 
         return carService.addCar(car);
+    }
+
+    /**、
+     * 根据车辆ID查询车辆信息
+     * @param carId
+     * @return
+     */
+    @GetMapping("/getCar")
+    public ResponseResult<Car> getCarById(Long carId){
+
+        return carService.getCarById(carId);
     }
 
 }

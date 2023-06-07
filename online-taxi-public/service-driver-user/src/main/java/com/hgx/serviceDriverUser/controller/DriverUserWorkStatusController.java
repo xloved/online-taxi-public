@@ -13,7 +13,7 @@ import javax.annotation.Resource;
 
 /**
  * <p>
- *  前端控制器
+ *  司机工作状态服务
  * </p>
  *
  * @author huogaoxu
@@ -26,6 +26,11 @@ public class DriverUserWorkStatusController {
     @Resource
     private DriverUserWorkStatusService driverUserWorkStatusService;
 
+    /**
+     * 修改司机工作状态
+     * @param driverUserWorkStatus
+     * @return
+     */
     @PutMapping("/worker-status")
     public ResponseResult updateWorkerStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus){
         Long driverId = driverUserWorkStatus.getDriverId();

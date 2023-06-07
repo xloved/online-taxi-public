@@ -38,12 +38,17 @@ public class VerificationCodeService {
     @Resource
     StringRedisTemplate stringRedisTemplate;
 
-
+    /**
+     * 根据手机号获取验证码
+     * @param driverPhone
+     * @return
+     */
     public ResponseResult verificationCode(String driverPhone ){
 
         // 查询 service-Driver-User服务该手机号是否存在
         ResponseResult<DriverUserExistsResponse> userByPhone = serviceDriverUserClients.getUserByPhone(driverPhone);
         DriverUserExistsResponse data = userByPhone.getData();
+        // 不存在的话返回提示信息
         int ifExists = data.getIfExists();
         if(ifExists == DriverCarConstants.DRIVER_NOT_EXISTS) {
             return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXITS.getCode(),
@@ -63,7 +68,12 @@ public class VerificationCodeService {
         return ResponseResult.success("");
     }
 
-
+    /**
+     * 司机根据手机号从redis中获取验证码进行校验
+     * @param driverPhone
+     * @param verificationCode
+     * @return
+     */
     public ResponseResult checkCode(String driverPhone,String verificationCode){
 
         //根据手机号去redis读取验证码

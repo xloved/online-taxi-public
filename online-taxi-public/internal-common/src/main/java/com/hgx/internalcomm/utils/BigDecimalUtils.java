@@ -3,7 +3,7 @@ package com.hgx.internalcomm.utils;
 import java.math.BigDecimal;
 
 /**
- * @Description
+ * @Description 定义价格的计算方法
  * @Author huogaoxu
  * @Date 2023-01-14 21:53
  **/

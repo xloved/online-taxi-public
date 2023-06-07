@@ -28,10 +28,8 @@ public class DriverUserService {
     @Resource
     private DriverUserWorkStatusMapper driverUserWorkStatusMapper;
 
-
-
     /**
-     * 插入司机信息
+     * 插入司机信息，在插入司机信息的同时初始化司机状态
      * @param driverUser
      * @return
      */
@@ -39,8 +37,7 @@ public class DriverUserService {
         LocalDateTime now = LocalDateTime.now();
         driverUser.setGmtCreate(now);
         driverUser.setGmtModified(now);
-        int insert = driverUserMapper.insert(driverUser);
-
+        driverUserMapper.insert(driverUser);
         /**
          * 初始化司机状态
          */
@@ -67,18 +64,23 @@ public class DriverUserService {
         return ResponseResult.success("");
     }
 
-
+    /**
+     * check当前司机
+     * @param driverPhone
+     * @return
+     */
     public ResponseResult<DriverUser> getUserByPhone(String driverPhone){
-
+        // 根据手机号和状态获取当前司机
         HashMap<String, Object> map = new HashMap<>();
         map.put("driver_phone",driverPhone);
         map.put("state", DriverCarConstants.DRIVER_STATE_VALD);
         List<DriverUser> driverUsers = driverUserMapper.selectByMap(map);
-
+        // 判断司机是否存在，不存在返回提示信息，存在获取第一条数据
         if (driverUsers.isEmpty()) {
             return ResponseResult.fail(CommonStatusEnum.DRIVER_NOT_EXITS.getCode(),
                     CommonStatusEnum.DRIVER_NOT_EXITS.getValue());
         }
+
         DriverUser driverUser = driverUsers.get(0);
         return ResponseResult.success(driverUser);
 

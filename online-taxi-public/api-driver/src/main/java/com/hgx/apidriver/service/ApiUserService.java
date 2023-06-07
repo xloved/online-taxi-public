@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 
 /**
- * @Description com.hgx.apidriver.service
+ * @Description 司机端service
  * @Author huogaoxu
  * @Date 2023-05-30 21:25
  * @Version 1.0
@@ -19,6 +19,11 @@ public class ApiUserService {
     @Resource
     private ServiceDriverUserClients serviceDriverUserClients;
 
+    /**
+     * 调用service-driver-user修改司机信息
+     * @param driverUser
+     * @return
+     */
     public ResponseResult updateApiUser(DriverUser driverUser){
         serviceDriverUserClients.updateDriverUser(driverUser);
         return ResponseResult.success("");

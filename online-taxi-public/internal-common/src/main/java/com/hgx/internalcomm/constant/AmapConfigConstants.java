@@ -1,7 +1,5 @@
 package com.hgx.internalcomm.constant;
 
-import javax.sql.rowset.serial.SerialStruct;
-
 /**
  * @Description
  * @Author huogaoxu
@@ -18,6 +16,33 @@ public class AmapConfigConstants {
      * 省政区地址
      */
     public static final String DISTRICT_URL = "https://restapi.amap.com/v3/config/district";
+
+    /**
+     * 高德地图猎鹰服务新增服务管理
+     */
+    public static final String SERVIC_ADD_URL = "https://tsapi.amap.com/v1/track/service/add";
+
+    /**
+     * 高德地图猎鹰服务新增终端管理
+     */
+    public static final String TERMINAL_ADD_URL = "https://tsapi.amap.com/v1/track/terminal/add";
+
+    /**
+     * 高德地图猎鹰服务新增轨迹
+     */
+    public static final String TRACK_ADD_URL = "https://tsapi.amap.com/v1/track/trace/add";
+
+    /**
+     * 高德地图猎鹰服务轨迹上传
+     */
+    public static final String POINT_ADD_URL = "https://tsapi.amap.com/v1/track/point/upload";
+
+    /**
+     * 高德猎鹰终端搜索
+     */
+    public static final String AROUNDSERACH_URL = "https://tsapi.amap.com/v1/track/terminal/aroundsearch";
+
+
 
     /**
      * 路径规划json key的值

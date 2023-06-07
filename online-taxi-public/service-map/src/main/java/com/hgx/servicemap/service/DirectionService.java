@@ -4,7 +4,6 @@ import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.DirectionResponse;
 import com.hgx.servicemap.remote.MapDirectionClient;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -28,10 +27,12 @@ public class DirectionService {
      * @param destLatitude
      * @return
      */
-    public ResponseResult GetDirection(String depLongitude, String depLatitude, String destLongitude, String destLatitude){
+    public ResponseResult GetDirection(String depLongitude, String depLatitude,
+                                       String destLongitude, String destLatitude){
 
         //调用第三方接口
-        DirectionResponse direction = mapDirectionClient.direction(depLongitude, depLatitude, destLongitude, destLatitude);
+        DirectionResponse direction = mapDirectionClient.direction(depLongitude, depLatitude,
+                destLongitude, destLatitude);
 
         return ResponseResult.success(direction);
     }

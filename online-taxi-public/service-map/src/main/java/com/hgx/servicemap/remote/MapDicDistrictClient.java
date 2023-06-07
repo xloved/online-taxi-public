@@ -1,19 +1,16 @@
 package com.hgx.servicemap.remote;
 
 import com.hgx.internalcomm.constant.AmapConfigConstants;
-import com.hgx.internalcomm.dto.ResponseResult;
 import lombok.extern.slf4j.Slf4j;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
-import java.net.URL;
 
 /**
- * @Description
+ * @Description 调用高德web服务中的行政区域查询接口
  * @Author huogaoxu
  * @Date 2023-02-01 21:49
  **/
@@ -26,6 +23,11 @@ public class MapDicDistrictClient {
     @Resource
     private RestTemplate restTemplate;
 
+    /**
+     *
+     * @param keywords
+     * @return
+     */
     public String dicDistrict(String keywords){
 
         /**
@@ -39,7 +41,8 @@ public class MapDicDistrictClient {
 
         //解析结果
         ResponseEntity<String> forEntity = restTemplate.getForEntity(builder.toString(), String.class);
-        //插入数据库
+
+        //返回具体的结果信息，插入数据库
         return forEntity.getBody();
     }
 }

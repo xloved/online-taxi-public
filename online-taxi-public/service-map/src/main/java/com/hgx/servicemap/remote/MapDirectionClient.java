@@ -46,16 +46,21 @@ public class MapDirectionClient {
                 .append("&")
                 .append("output=json&")
                 .append("key="+amapKey);
-        log.info(urlBuilder.toString());
+        log.info("高德路径规划请求信息"+urlBuilder.toString());
         //调用高德接口
         ResponseEntity<String> directionEntity = restTemplate.getForEntity(urlBuilder.toString(), String.class);
         String directionString = directionEntity.getBody();
-        log.info("高德地图显示接口信息"+directionString);
+        log.info("高德路径规划显示信息"+directionString);
         //解析接口
         DirectionResponse directionResponse = parseDirection(directionString);
         return directionResponse;
     }
 
+    /**
+     * 获取路径规划返回的结果数据，然后循坏拆分
+     * @param directionString
+     * @return
+     */
     public DirectionResponse parseDirection(String directionString){
         DirectionResponse directionResponse = null;//初始化
         try {
@@ -65,6 +70,7 @@ public class MapDirectionClient {
             if (result.has(AmapConfigConstants.STATUS)){//判断状态是否存在
                 int status = result.getInt(AmapConfigConstants.STATUS);
                 if (status == 1) {//状态为1是正常，为0异常
+                    // 判断是否是route层
                     if(result.has(AmapConfigConstants.ROUTE)){
                         JSONObject routeObject = result.getJSONObject(AmapConfigConstants.ROUTE);
                         JSONArray pathsArray = routeObject.getJSONArray(AmapConfigConstants.PATHS);

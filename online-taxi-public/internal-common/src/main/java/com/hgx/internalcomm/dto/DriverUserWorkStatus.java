@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 死机工作状态表
+ * 司机工作状态表
  * </p>
  *
  * @author huogaoxu

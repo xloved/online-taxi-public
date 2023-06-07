@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @FeignClient("service-verificationcode")
 public interface ServiceVerificationClients {
 
+    /**
+     * 生成6位数验证码
+     * @param size
+     * @return
+     */
     @RequestMapping(method = RequestMethod.GET,value = "/numberCode/{size}")
     public ResponseResult<NumberCodeResponse> numberCode(@PathVariable("size") int size);
 }

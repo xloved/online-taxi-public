@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * @Description
+ * @Description 行政区域查询
  * @Author huogaoxu
  * @Date 2023-01-31 23:05
  **/

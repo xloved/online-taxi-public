@@ -21,10 +21,16 @@ public class VerificationCodeController {
 
     @Resource
     private VerificationCodeService verificationCodeService;
+
+    /**
+     * 根据司机手机号获取验证码
+     * @param verificationCode
+     * @return
+     */
     @GetMapping("/verification-code")
     public ResponseResult verificationCode(@RequestBody VerificationCodeDTO verificationCode){
         String driverPhone = verificationCode.getDriverPhone();
-        log.info("手机号为"+driverPhone);
+        log.info("司机手机号为："+driverPhone);
 
         return verificationCodeService.verificationCode(driverPhone);
     }

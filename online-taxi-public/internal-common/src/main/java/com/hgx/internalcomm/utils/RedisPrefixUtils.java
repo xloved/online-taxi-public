@@ -1,5 +1,8 @@
 package com.hgx.internalcomm.utils;
 
+/**
+ * redis通用方法
+ */
 public class RedisPrefixUtils {
 
     //定义乘客验证码的前缀

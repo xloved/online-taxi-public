@@ -4,6 +4,10 @@ import com.hgx.internalcomm.constant.CommonStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/**
+ * 定义通用的响应方法
+ * @param <T>
+ */
 @Data
 @Accessors(chain = true)
 public class ResponseResult<T> {

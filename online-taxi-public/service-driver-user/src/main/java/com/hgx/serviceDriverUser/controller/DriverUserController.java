@@ -46,13 +46,21 @@ public class DriverUserController {
         return driverUserService.updateDriverUser(driverUser);
     }
 
+    /**
+     * 根据手机号验证当前司机是否存在
+     * @param driverPhone
+     * @return
+     */
     @GetMapping("/check-driver/{driverPhone}")
     public  ResponseResult<DriverUserExistsResponse> getUserByPhone(@PathVariable String driverPhone){
        // String driverPhone = driverUser.getDriverPhone();
         ResponseResult<DriverUser> userByPhone = driverUserService.getUserByPhone(driverPhone);
         DriverUser driverPhoneDB = userByPhone.getData();
+        // 返回前端接口的响应值
         DriverUserExistsResponse response = new DriverUserExistsResponse();
+        // 当前司机存在
         int ifExists = DriverCarConstants.DRIVER_EXISTS;
+        // 判断从数据库获取的值为null，然后返回前端当前司机状态为不存在，否则司机信息为存在
         if (driverPhoneDB == null) {
             ifExists = DriverCarConstants.DRIVER_NOT_EXISTS;
             response.setDriverPhone(driverPhone);
@@ -62,7 +70,7 @@ public class DriverUserController {
             response.setIfExists(ifExists);
         }
 
-
+        // 返回响应值
         return ResponseResult.success(response);
     }
 }

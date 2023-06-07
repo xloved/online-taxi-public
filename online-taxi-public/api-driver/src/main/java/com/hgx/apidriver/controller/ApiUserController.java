@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * @Description com.hgx.apidriver.controller
+ * @Description 司机端服务
  * @Author huogaoxu
  * @Date 2023-05-30 21:21
  * @Version 1.0
@@ -23,6 +23,11 @@ public class ApiUserController {
     @Resource
     private ApiUserService apiUserService;
 
+    /**
+     * 修改司机信息
+     * @param driverUser
+     * @return
+     */
     @PutMapping("/user")
     public ResponseResult updateApiUser(@RequestBody DriverUser driverUser){
 

@@ -3,7 +3,7 @@ package com.hgx.internalcomm.dto;
 import lombok.Data;
 
 /**
- * @Description
+ * @Description 区域省市
  * @Author huogaoxu
  * @Date 2023-01-08 22:52
  **/

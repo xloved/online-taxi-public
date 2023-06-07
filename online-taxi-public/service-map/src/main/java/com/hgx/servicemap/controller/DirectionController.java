@@ -3,7 +3,6 @@ package com.hgx.servicemap.controller;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.ForecastPriceDTO;
 import com.hgx.servicemap.service.DirectionService;
-import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 
 /**
- * @Description
+ * @Description  车辆路径规划
  * @Author huogaoxu
  * @Date 2023-01-02 16:07
  **/
