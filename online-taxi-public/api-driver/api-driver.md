@@ -65,4 +65,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     }
 }
 ```
-7. 
+7. api-driver调用service-driver-user服务，进行司机信息的修改
+8. api-driver调用service-map服务，进行车辆位置轨迹点信息上传时先调用service-driver-user根据车辆ID查询车辆信息，然后根据车辆id上传车辆轨迹点
+9. 

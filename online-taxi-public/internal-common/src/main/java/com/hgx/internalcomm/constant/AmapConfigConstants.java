@@ -35,7 +35,7 @@ public class AmapConfigConstants {
     /**
      * 高德地图猎鹰服务轨迹上传
      */
-    public static final String POINT_ADD_URL = "https://tsapi.amap.com/v1/track/point/upload";
+    public static final String POINT_UPLOAD_URL = "https://tsapi.amap.com/v1/track/point/upload";
 
     /**
      * 高德猎鹰终端搜索

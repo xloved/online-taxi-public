@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 public class PointService {
 
     @Resource
-    PointClient pointClient;
+    private PointClient pointClient;
 
     public ResponseResult upload(PointRequest pointRequest){
 

@@ -11,6 +11,13 @@ import lombok.Data;
 @Data
 public class PointsDTO {
 
+    /**
+     * 经纬度坐标
+     */
     private String location;
+
+    /**
+     * 此次定位的时间点
+     */
     private String locatetime;
 }

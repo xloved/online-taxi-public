@@ -29,6 +29,7 @@
 | service-price            | 8084 |
 | service-map              | 8085 |
 | service-driver-user      | 8086 |
+| service-order            | 8089 |
 | api-boss                 | 8087 |
 | api-driver               | 8088 |
 

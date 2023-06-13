@@ -35,7 +35,7 @@ public class TerminalService {
      * @param radius
      * @return
      */
-    public ResponseResult aroundsearch(String center, String radius){
+    public ResponseResult aroundsearch(String center, Integer radius){
 
         return terminalClient.aroundsearch(center, radius);
     }

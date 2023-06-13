@@ -77,11 +77,12 @@ public class TerminalClient {
 
     /**
      * 终端周边搜索
+     *
      * @param center
      * @param radius
      * @return
      */
-    public ResponseResult<List<TerminalResponse>> aroundsearch(String center, String radius){
+    public ResponseResult aroundsearch(String center, Integer radius){
         StringBuilder builder  = new StringBuilder();
         builder.append(AmapConfigConstants.AROUNDSERACH_URL)
                 .append("?").append("key=").append(amapKey)
@@ -93,8 +94,8 @@ public class TerminalClient {
                 .append("radius=").append(radius);
         log.info("搜索终端的请求："+builder.toString());
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(builder.toString(), null, String.class);
-        log.info("搜索终端的响应："+responseEntity.getBody());
         String body = responseEntity.getBody();
+        log.info("搜索终端的响应："+body);
         JSONObject jsonObject = JSONObject.fromObject(body);
         JSONObject data = jsonObject.getJSONObject("data");
         JSONArray array = data.getJSONArray("results");
@@ -103,7 +104,7 @@ public class TerminalClient {
             TerminalResponse terminalResponse = new TerminalResponse();
             JSONObject arrayJSONObject = array.getJSONObject(i);
             String tid = arrayJSONObject.getString("tid");
-            Long carId = arrayJSONObject.getLong("desc");
+            long carId = arrayJSONObject.getLong("desc");
             terminalResponse.setCarId(carId);
             terminalResponse.setTid(tid);
             list.add(terminalResponse);

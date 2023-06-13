@@ -17,9 +17,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient("service-map")
 public interface ServiceMapClient {
 
+    /**
+     * 创建终端
+     * @param name
+     * @param desc
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/terminal/add")
-    public ResponseResult<TerminalResponse> add(@RequestParam String name, @RequestParam String desc);
+    public ResponseResult<TerminalResponse> add(@RequestParam String name, @RequestParam("desc") String desc);
 
+    /**
+     * 创建轨迹
+     * @param tid
+     * @return
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/track/add")
     public ResponseResult<TrackResponse> addTrack(@RequestParam String tid);
 }

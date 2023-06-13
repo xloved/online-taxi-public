@@ -11,6 +11,13 @@ import lombok.Data;
 @Data
 public class TerminalResponse {
    // private String sid;
+    /**
+     * 终端ID
+     */
     private String tid;
+
+    /**
+     * 车辆ID
+     */
     private Long carId;
 }

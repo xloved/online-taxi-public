@@ -42,7 +42,7 @@ public class CarService  {
         carMapper.insert(car);
 
         // 调用service-map获取此车辆对应的tid
-        ResponseResult<TerminalResponse> result = serviceMapClient.add(car.getVehicleNo(), car.getId()+"");
+        ResponseResult<TerminalResponse> result = serviceMapClient.add(car.getVehicleNo(), car.getId().toString());
         String tid = result.getData().getTid();
         car.setTid(tid);
 

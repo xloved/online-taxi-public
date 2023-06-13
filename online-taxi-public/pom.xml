@@ -25,6 +25,7 @@
         <module>api-boss</module>
         <module>api-driver</module>
         <module>service-verificationcode</module>
+        <module>service-order</module>
     </modules>
     <packaging>pom</packaging>
 

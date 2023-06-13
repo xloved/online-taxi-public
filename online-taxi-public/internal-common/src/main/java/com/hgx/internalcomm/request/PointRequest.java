@@ -11,11 +11,18 @@ import lombok.Data;
 @Data
 public class PointRequest {
 
+    /**
+     * 终端id
+     */
     private String tid;
+
+    /**
+     * 轨迹id
+     */
     private String trid;
 
     /**
-     * 引入具体上传轨迹点的信息 json数组形式，定义成数组
+     * 轨迹信息
      */
     private PointsDTO[] points;
 

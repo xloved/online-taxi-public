@@ -36,49 +36,41 @@ public class PointClient {
      * @param pointRequest
      * @return
      */
-    public ResponseResult upload(PointRequest pointRequest){
-        // 获取高德猎鹰终端管理的轨迹点上传的URL
-        StringBuilder builder = new StringBuilder();
-        builder.append(AmapConfigConstants.POINT_ADD_URL)
-                .append("?").append("key=").append(amapKey)
-                .append("&")
-                .append("sid=").append(Sid)
-                .append("&")
-                .append("tid=").append(pointRequest.getTid())
-                .append("&")
-                .append("trid=").append(pointRequest.getTrid())
-                .append("&")
-                .append("points=");
-        // 获取具体的上传点的信息
+    public ResponseResult upload(PointRequest pointRequest) {
+        //拼装请求url
+        StringBuilder urlBuilder = new StringBuilder();
+        urlBuilder.append(AmapConfigConstants.POINT_UPLOAD_URL);
+        urlBuilder.append("?key=" + amapKey);
+        urlBuilder.append("&");
+        urlBuilder.append("sid=" + Sid);
+        urlBuilder.append("&");
+        urlBuilder.append("tid=").append(pointRequest.getTid());
+        urlBuilder.append("&");
+        urlBuilder.append("trid=" + pointRequest.getTrid());
+        urlBuilder.append("&");
+        urlBuilder.append("points=");
         PointsDTO[] points = pointRequest.getPoints();
-        builder.append("%5B");
-        // 遍历取出数组中的值，然后使用URL编码格式把url输出
+        urlBuilder.append("%5B");
         for (PointsDTO point : points) {
-            builder.append("%7B");
-            String location = point.getLocation();
+            urlBuilder.append("%7B");
             String locatetime = point.getLocatetime();
-            builder.append("%22location%22")
-                    .append("%3A")
-                    .append("%22").append(location).append("%22")
-                    .append("%2C")
-                    .append("%22locatetime%22")
-                    .append("%3A")
-                    .append("%22").append(locatetime).append("%22");
-
-            builder.append("%7D");
+            String location = point.getLocation();
+            urlBuilder.append("%22location%22");
+            urlBuilder.append("%3A");
+            urlBuilder.append("%22" + location + "%22");
+            urlBuilder.append("%2C");
+            urlBuilder.append("%22locatetime%22");
+            urlBuilder.append("%3A");
+            urlBuilder.append(locatetime);
+            urlBuilder.append("%7D");
         }
-        builder.append("%5D");
+        urlBuilder.append("%5D");
+        log.info("上传轨迹点url：" + urlBuilder.toString());
 
-        System.out.println("车辆位置上传请求: "+builder.toString());
-
-        //解析返回数据的结果
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(URI.create(builder.toString()),
-                null, String.class);
-        // 获取返回数据的结果内容
-        String body = responseEntity.getBody();
-       log.info("车辆位置上传响应数据"+body);
+        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(URI.create(urlBuilder.toString()), "", String.class);
+        String body = stringResponseEntity.getBody();
+        log.info("高德地图响应数据：" + body);
 
         return ResponseResult.success();
-
     }
 }

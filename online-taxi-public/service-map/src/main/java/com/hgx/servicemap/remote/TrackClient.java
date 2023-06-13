@@ -3,6 +3,7 @@ package com.hgx.servicemap.remote;
 import com.hgx.internalcomm.constant.AmapConfigConstants;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.TrackResponse;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ import javax.annotation.Resource;
  * @Version 1.0
  **/
 @Service
+@Slf4j
 public class TrackClient {
 
     @Value("${amap.AmapKey}")
@@ -43,9 +45,11 @@ public class TrackClient {
                 .append("&")
                 .append("tid=").append(tid);
 
+        log.info("新增轨迹："+builder.toString());
         //解析URL结果
         ResponseEntity<String> forEntity = restTemplate.postForEntity(builder.toString(), null, String.class);
         String body = forEntity.getBody();
+        log.info("新增轨迹响应数据：" + forEntity.getBody());
         // 转换成JSON
         JSONObject jsonObject = JSONObject.fromObject(body);
         // 获取整个的data数据

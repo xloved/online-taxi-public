@@ -11,6 +11,9 @@ import lombok.Data;
 @Data
 public class ApiDriverPointRequest {
 
+    /**
+     * 车辆Id
+     */
     private Long carId;
 
     private PointsDTO[] points;
