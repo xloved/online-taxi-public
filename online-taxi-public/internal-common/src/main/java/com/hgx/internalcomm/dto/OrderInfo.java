@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 /**
  * <p>
- * 
+ * 订单信息表
  * </p>
  *
  * @author huogaoxu
@@ -96,12 +96,20 @@ public class OrderInfo implements Serializable {
     private String destLatitude;
 
     /**
-     * 坐标加密标识\r\n1:GCJ-02测绘局标准\r\n2:WGS84 GPS标准\r\n3:BD-09 百度标准\r\n4:CGCS2000 北斗标准\r\n0:其他
+     * 坐标加密标识
+     * 1:GCJ-02测绘局标准
+     * 2:WGS84 GPS标准
+     * 3:BD-09 百度标准
+     * 4:CGCS2000 北斗标准
+     * 0:其他
      */
     private Integer encrypt;
 
     private String fareType;
 
+    /**
+     * 版本号
+     */
     private Integer fareVersion;
 
     /**

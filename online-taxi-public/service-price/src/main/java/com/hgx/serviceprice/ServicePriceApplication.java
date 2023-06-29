@@ -15,9 +15,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 @MapperScan("com.hgx.serviceprice.mapper")
-public class ForecastPriceApplication {
+public class ServicePriceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(ForecastPriceApplication.class);
+        SpringApplication.run(ServicePriceApplication.class);
     }
 }

@@ -1,9 +1,12 @@
 package com.hgx.servicemap.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hgx.internalcomm.dto.DicDistrict;
+import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.servicemap.mapper.DicdistrictMapper;
-import lombok.val;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -34,5 +37,17 @@ public class TestController {
         List<DicDistrict> dicDistricts = dicdistrictMapper.selectByMap(map);
         System.out.println(dicDistricts);
         return "service-map";
+    }
+
+
+    @PostMapping("/finderCountry")
+    public ResponseResult getFinder(@RequestBody DicDistrict dicDistrict){
+
+        QueryWrapper<DicDistrict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("parent_address_code",dicDistrict.getParentAddressCode());
+        queryWrapper.eq("level",dicDistrict.getLevel());
+        List<DicDistrict> dicDistricts = dicdistrictMapper.selectList(queryWrapper);
+        System.out.println("查询结果"+dicDistricts);
+        return ResponseResult.success(dicDistricts);
     }
 }

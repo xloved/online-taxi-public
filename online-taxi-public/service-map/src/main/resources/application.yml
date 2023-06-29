@@ -20,3 +20,8 @@ spring:
 amap:
   AmapKey: 3d0e72076c56fad88ae7398a9ed6b255
   Sid: 951878
+
+# 打印SQL语句
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

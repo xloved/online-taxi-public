@@ -15,6 +15,15 @@ import java.time.LocalDateTime;
 public class OrdersRequest {
 
     /**
+     * 乘客ID
+     */
+    private Long passengerId;
+
+    /**
+     * 乘客手机号
+     */
+    private Long passengerPhone;
+    /**
      * 乘客下单区域地址
      */
     private String address;
@@ -75,4 +84,14 @@ public class OrdersRequest {
      */
     private String fareType;
 
+    /**
+     * 运价信息版本
+     */
+    private Integer fareVersion;
+
+
+    /**
+     * 设备唯一编号
+     */
+    private String deviceCode;
 }

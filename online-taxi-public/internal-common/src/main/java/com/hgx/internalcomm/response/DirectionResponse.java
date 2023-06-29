@@ -10,6 +10,9 @@ import lombok.Data;
 @Data
 public class DirectionResponse {
 
+    // 行驶距离
     private Integer distance;
+
+    // 行驶时长
     private Integer duration;
 }
