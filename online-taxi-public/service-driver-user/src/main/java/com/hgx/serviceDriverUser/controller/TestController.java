@@ -1,6 +1,7 @@
 package com.hgx.serviceDriverUser.controller;
 
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.serviceDriverUser.mapper.DriverUserMapper;
 import com.hgx.serviceDriverUser.service.DriverUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,5 +27,21 @@ public class TestController {
     @GetMapping("/test_db")
     public ResponseResult testDb(){
         return driverUserService.testGetDriverUser();
+    }
+
+
+    //测试driverUsermapper文件能否使用
+    @Resource
+    DriverUserMapper driverUserMapper;
+    @GetMapping("/testSelect")
+    public int testSelect(String args){
+       return  driverUserMapper.select("1");
+
+    }
+
+    @GetMapping("/test-xml")
+    public int select(String cityCode){
+        return  driverUserMapper.select(cityCode);
+
     }
 }

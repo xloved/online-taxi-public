@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.constant.OrdersConstants;
 import com.hgx.internalcomm.dto.OrderInfo;
+import com.hgx.internalcomm.dto.PriceRule;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import com.hgx.internalcomm.utils.RedisPrefixUtils;
@@ -44,20 +45,26 @@ public class OrderInfoService  {
      */
     public ResponseResult addOrder(OrdersRequest ordersRequest)  {
         // 判断当前价格是否为最新价格
-        ResponseResult newVersion = servicePriceClient.isNewVersion(ordersRequest.getFareType(),
-                ordersRequest.getFareVersion());
-        Boolean isNewPrice = (Boolean) newVersion.getData();
-        if(!isNewPrice){
-            return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(),
-                    CommonStatusEnum.PRICE_RULE_EMPTY.getValue());
-        }
+//        ResponseResult<Boolean> newVersion = servicePriceClient.isNewVersion(ordersRequest.getFareType(),
+//                ordersRequest.getFareVersion());
+//        if(!(newVersion.getData())){
+//            return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(),
+//                    CommonStatusEnum.PRICE_RULE_EMPTY.getValue());
+//        }
+
         // 判断下单设备是否是黑名单
-        String deviceCodePrefix = RedisPrefixUtils.blackDeviceCodePrefix + ordersRequest.getDeviceCode();
-        // 设置key
-        if (isBlackDevice((deviceCodePrefix))) {
-            return ResponseResult.fail(CommonStatusEnum.DEVICE_IS_BLACK.getCode(),
-                    CommonStatusEnum.DEVICE_IS_BLACK.getValue());
+//        if (isBlackDevice((ordersRequest))) {
+//            return ResponseResult.fail(CommonStatusEnum.DEVICE_IS_BLACK.getCode(),
+//                    CommonStatusEnum.DEVICE_IS_BLACK.getValue());
+//        }
+
+        // 判断下单的城市和计价规则是否存在
+        if (!isPriceRuleExists(ordersRequest)) {
+            return ResponseResult.fail(CommonStatusEnum.CITY_SERVICE_NOT_SERVICE.getCode(),
+                    CommonStatusEnum.CITY_SERVICE_NOT_SERVICE.getValue());
         }
+
+
         // 判断  有正在进行的订单不允许下单
         if(isOrderGoingon(ordersRequest.getPassengerId()) > 0){
             return ResponseResult.fail(CommonStatusEnum.ORDER_GOING_ON.getCode(),
@@ -99,7 +106,9 @@ public class OrderInfoService  {
     }
 
     // 判断是否有黑名单
-    private boolean isBlackDevice(String deviceCodePrefix) {
+    private boolean isBlackDevice(OrdersRequest ordersRequest) {
+        // 设置key
+        String deviceCodePrefix = RedisPrefixUtils.blackDeviceCodePrefix + ordersRequest.getDeviceCode();
         Boolean hasKey = stringRedisTemplate.hasKey(deviceCodePrefix);
         if (Boolean.TRUE.equals(hasKey)) {
             String deveicKeys = stringRedisTemplate.opsForValue().get(deviceCodePrefix);
@@ -114,6 +123,20 @@ public class OrderInfoService  {
             stringRedisTemplate.opsForValue().setIfAbsent(deviceCodePrefix,"1",1L, TimeUnit.HOURS);
         }
         return false;
+    }
+
+    private boolean isPriceRuleExists(OrdersRequest ordersRequest){
+        String fareType = ordersRequest.getFareType();
+        int index = fareType.indexOf("$");
+        String cityCode = fareType.substring(0, index);
+        String vehicleType = fareType.substring(index + 1);
+
+        PriceRule priceRule = new PriceRule();
+        priceRule.setCityCode(cityCode);
+        priceRule.setVehicleType(vehicleType);
+        ResponseResult<Boolean> result = servicePriceClient.ifExits(priceRule);
+
+        return result.getData();
     }
 
 }

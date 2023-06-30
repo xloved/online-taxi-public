@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
@@ -35,7 +34,7 @@ public class OrderInfoController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseResult addOrders(@RequestBody OrdersRequest ordersRequest, HttpServletRequest httpRequest){
+    public ResponseResult addOrders(@RequestBody OrdersRequest ordersRequest){// HttpServletRequest httpRequest
         // 获取设备请求头 ，使用apifox测试通过，通过header获取deviceCode
 //        String header = httpRequest.getHeader(HeaderParamConstant.DEVICE_CODE);
 //        ordersRequest.setDeviceCode(header);

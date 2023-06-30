@@ -1,10 +1,9 @@
 package com.hgx.serviceorder.remote;
 
+import com.hgx.internalcomm.dto.PriceRule;
 import com.hgx.internalcomm.dto.ResponseResult;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Description 调用service-price服务
@@ -22,5 +21,10 @@ public interface ServicePriceClient {
      * @return
      */
     @RequestMapping(method = RequestMethod.GET,value = "/price-rule/isNewVersion")
-    public ResponseResult isNewVersion(@RequestParam String fareType, @RequestParam Integer fareVersion);
+    public ResponseResult<Boolean> isNewVersion(@RequestParam String fareType, @RequestParam Integer fareVersion);
+
+    @RequestMapping(method = RequestMethod.POST,value = "/price-rule/if-exits")
+    public ResponseResult<Boolean> ifExits(@RequestBody PriceRule priceRule);
+
+
 }

@@ -132,7 +132,7 @@ public class PriceRuleService {
      * @param fareVersion
      * @return
      */
-    public ResponseResult isNewVersion(String fareType, Integer fareVersion){
+    public ResponseResult<Boolean> isNewVersion(String fareType, Integer fareVersion){
         ResponseResult newestVersion = getNewestVersion(fareType);
         if(newestVersion.getCode() == CommonStatusEnum.PRICE_RULE_EMPTY.getCode()){
             return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(),
@@ -144,5 +144,25 @@ public class PriceRuleService {
             return ResponseResult.success(false);
         }
             return ResponseResult.success(true);
+    }
+
+    /**
+     * 判断当前城市的车辆类型和计价规则是否存在
+     * @param priceRule
+     * @return
+     */
+    public ResponseResult<Boolean> ifExits(PriceRule priceRule){
+        String cityCode = priceRule.getCityCode();
+        String vehicleType = priceRule.getVehicleType();
+        QueryWrapper<PriceRule> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("city_code",cityCode)
+                .eq("vehicle_Type",vehicleType)
+                .orderByDesc("fare_version");
+        List<PriceRule> priceRules = priceRuleMapper.selectList(queryWrapper);
+        if (priceRules.size() > 0) {
+            return ResponseResult.success(true);
+        } else {
+          return ResponseResult.success(false);
+        }
     }
 }

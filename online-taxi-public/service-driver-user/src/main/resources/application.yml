@@ -22,3 +22,5 @@ logging:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  # mybatis映射文件mapper
+  mapper-locations: classpath:mappers/*.xml

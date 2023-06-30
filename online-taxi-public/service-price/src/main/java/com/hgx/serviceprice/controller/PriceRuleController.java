@@ -61,9 +61,20 @@ public class PriceRuleController {
      * @return
      */
     @GetMapping("/isNewVersion")
-    public ResponseResult isNewVersion(@RequestParam String fareType, @RequestParam Integer fareVersion){
+    public ResponseResult<Boolean> isNewVersion(@RequestParam String fareType, @RequestParam Integer fareVersion){
 
         return priceRuleService.isNewVersion(fareType, fareVersion);
 
+    }
+
+
+    /**
+     * 判断该城市对应的车型和计价规则是否存在
+     * @return
+     */
+    @PostMapping("/if-exits")
+    public ResponseResult ifExits(@RequestBody PriceRule priceRule){
+
+        return priceRuleService.ifExits(priceRule);
     }
 }
