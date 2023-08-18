@@ -38,7 +38,7 @@ public class OrderInfoController {
         // 获取设备请求头 ，使用apifox测试通过，通过header获取deviceCode
 //        String header = httpRequest.getHeader(HeaderParamConstant.DEVICE_CODE);
 //        ordersRequest.setDeviceCode(header);
-        System.out.println(ordersRequest.toString());
+//        System.out.println(ordersRequest.toString());
         log.info("订单信息：", ordersRequest.toString());
         return orderInfoService.addOrder(ordersRequest);
     }

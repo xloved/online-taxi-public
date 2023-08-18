@@ -6,6 +6,7 @@ import com.hgx.servicemap.remote.TerminalClient;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * @Description 高德猎鹰终端服务
@@ -35,7 +36,7 @@ public class TerminalService {
      * @param radius
      * @return
      */
-    public ResponseResult aroundsearch(String center, Integer radius){
+    public ResponseResult<List<TerminalResponse>> aroundsearch(String center, Integer radius){
 
         return terminalClient.aroundsearch(center, radius);
     }

@@ -82,7 +82,7 @@ public class TerminalClient {
      * @param radius
      * @return
      */
-    public ResponseResult aroundsearch(String center, Integer radius){
+    public ResponseResult<List<TerminalResponse>> aroundsearch(String center, Integer radius){
         StringBuilder builder  = new StringBuilder();
         builder.append(AmapConfigConstants.AROUNDSERACH_URL)
                 .append("?").append("key=").append(amapKey)
@@ -104,7 +104,10 @@ public class TerminalClient {
             TerminalResponse terminalResponse = new TerminalResponse();
             JSONObject arrayJSONObject = array.getJSONObject(i);
             String tid = arrayJSONObject.getString("tid");
-            long carId = arrayJSONObject.getLong("desc");
+            String desc = arrayJSONObject.getString("desc");
+            Long carId = Long.parseLong(desc);
+
+
             terminalResponse.setCarId(carId);
             terminalResponse.setTid(tid);
             list.add(terminalResponse);

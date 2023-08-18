@@ -14,6 +14,11 @@ spring:
     username: root
     password: xuge
 
+  #配置redis
+  redis:
+    port: 6379
+    host: 192.168.70.130
+
 # 打印日志
 logging:
   level:

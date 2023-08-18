@@ -33,15 +33,15 @@ public class TestController {
     //测试driverUsermapper文件能否使用
     @Resource
     DriverUserMapper driverUserMapper;
-    @GetMapping("/testSelect")
-    public int testSelect(String args){
-       return  driverUserMapper.select("1");
-
-    }
-
-    @GetMapping("/test-xml")
-    public int select(String cityCode){
-        return  driverUserMapper.select(cityCode);
-
-    }
+//    @GetMapping("/testSelect")
+//    public int testSelect(String args){
+//       return  driverUserMapper.selectDriverUserCountByCityCode("1");
+//
+//    }
+//
+//    @GetMapping("/test-xml")
+//    public int select(String cityCode){
+//        return  driverUserMapper.selectDriverUserCountByCityCode(cityCode);
+//
+//    }
 }

@@ -1,7 +1,13 @@
 package com.hgx.serviceorder.controller;
 
+import com.hgx.internalcomm.dto.OrderInfo;
+import com.hgx.serviceorder.mapper.OrderInfoMapper;
+import com.hgx.serviceorder.service.OrderInfoService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 /**
  * @Description com.hgx.serviceorder.controller
@@ -15,5 +21,19 @@ public class TestController {
     @GetMapping("/test")
     public String test(){
         return "service-order";
+    }
+
+
+    @Resource
+    private OrderInfoService orderInfoService;
+
+    @Resource
+    private OrderInfoMapper orderInfoMapper;
+
+    @GetMapping("/test-real-time-order/{orderId}")
+    public String dispatchRealTimeOrder(@PathVariable("orderId") long orderId){
+        OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
+        orderInfoService.dispatchRealTimeOrder(orderInfo);
+        return "test-real-time-order success";
     }
 }

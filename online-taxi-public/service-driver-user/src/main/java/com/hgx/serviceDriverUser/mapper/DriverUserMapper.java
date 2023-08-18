@@ -14,5 +14,5 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface DriverUserMapper extends BaseMapper<DriverUser> {
 
-    public int select(@Param("cityCode") String cityCode);
+    public int selectDriverUserCountByCityCode(@Param("cityCode") String cityCode);
 }
