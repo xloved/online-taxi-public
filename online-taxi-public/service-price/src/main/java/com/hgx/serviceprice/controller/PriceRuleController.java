@@ -2,6 +2,7 @@ package com.hgx.serviceprice.controller;
 
 import com.hgx.internalcomm.dto.PriceRule;
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.request.PriceRuleIsNewRequest;
 import com.hgx.serviceprice.service.PriceRuleService;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,14 +57,13 @@ public class PriceRuleController {
 
     /**
      * 判断是否是最新的计价规则
-     * @param fareType
-     * @param fareVersion
+     * @param priceRuleIsNewRequest
      * @return
      */
     @GetMapping("/isNewVersion")
-    public ResponseResult<Boolean> isNewVersion(@RequestParam String fareType, @RequestParam Integer fareVersion){
+    public ResponseResult<Boolean> isNewVersion(@RequestBody PriceRuleIsNewRequest priceRuleIsNewRequest){
 
-        return priceRuleService.isNewVersion(fareType, fareVersion);
+        return priceRuleService.isNewVersion(priceRuleIsNewRequest.getFareType(), priceRuleIsNewRequest.getFareVersion());
 
     }
 

@@ -7,6 +7,7 @@ import com.hgx.internalcomm.dto.OrderInfo;
 import com.hgx.internalcomm.dto.PriceRule;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
+import com.hgx.internalcomm.request.PriceRuleIsNewRequest;
 import com.hgx.internalcomm.response.TerminalResponse;
 import com.hgx.internalcomm.utils.RedisPrefixUtils;
 import com.hgx.serviceorder.mapper.OrderInfoMapper;
@@ -68,9 +69,13 @@ public class OrderInfoService  {
         }
 
         // 判断当前价格是否为最新价格
-        ResponseResult<Boolean> newVersion = servicePriceClient.isNewVersion(ordersRequest.getFareType(),
-                ordersRequest.getFareVersion());
-        if(!(newVersion.getData())){
+//        ResponseResult<Boolean> newVersion = servicePriceClient.isNewVersion(ordersRequest.getFareType(),
+//                ordersRequest.getFareVersion());
+        PriceRuleIsNewRequest priceRuleIsNewRequest = new PriceRuleIsNewRequest();
+        priceRuleIsNewRequest.setFareType(ordersRequest.getFareType());
+        priceRuleIsNewRequest.setFareVersion(ordersRequest.getFareVersion());
+        ResponseResult<Boolean> aNew = servicePriceClient.isNewVersion(priceRuleIsNewRequest);
+        if(!(aNew.getData())){
             return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(),
                     CommonStatusEnum.PRICE_RULE_EMPTY.getValue());
         }
