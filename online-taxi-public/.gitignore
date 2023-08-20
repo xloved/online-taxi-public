@@ -14,13 +14,12 @@ buildNumber.properties
 **/mvnw.cmd
 **/mvnw
 **/.gitignore
-/target/
 **/*.class
 **/*.iml
 online-taxi-public/service-price/target/
 online-taxi-public/internal-common/target/
 online-taxi-public/api-passenger/target/
-online-taxi-public/serice-map/target/
+online-taxi-public/service-map/target/
 online-taxi-public/service-driver-user/target/
 online-taxi-public/api-boss/target/
 online-taxi-public/api-driver/target/

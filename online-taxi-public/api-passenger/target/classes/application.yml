@@ -17,6 +17,6 @@ spring:
     port: 6379
     host: 192.168.70.130
     database: 0
-logging:
-  level:
-    root: debug
+#logging:
+#  level:
+#    root: debug

@@ -1,7 +1,8 @@
-package com.mashibing.servicessepush.controller;
+package com.hgx.servicessepush.controller;
 
-import com.mashibing.internalcommon.request.PushRequest;
-import com.mashibing.internalcommon.util.SsePrefixUtils;
+
+import com.hgx.internalcomm.request.PushRequest;
+import com.hgx.internalcomm.utils.SsePrefixUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

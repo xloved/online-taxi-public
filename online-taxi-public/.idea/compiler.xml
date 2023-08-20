@@ -10,16 +10,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="internal-common" />
         <module name="api-boss" />
         <module name="api-passenger" />
         <module name="service-driver-user" />
+        <module name="service-order" />
+        <module name="service-pay" />
+        <module name="api-driver" />
+        <module name="internal-common" />
+        <module name="service-sse-push" />
         <module name="service-verificationcode" />
         <module name="service-price" />
         <module name="service-map" />
-        <module name="service-order" />
+        <module name="sse-driver-client-web" />
         <module name="service-passenger-user" />
-        <module name="api-driver" />
       </profile>
     </annotationProcessing>
   </component>
@@ -33,8 +36,11 @@
       <module name="service-map" options="-parameters" />
       <module name="service-order" options="-parameters" />
       <module name="service-passenger-user" options="-parameters" />
+      <module name="service-pay" options="-parameters" />
       <module name="service-price" options="-parameters" />
+      <module name="service-sse-push" options="-parameters" />
       <module name="service-verificationcode" options="-parameters" />
+      <module name="sse-driver-client-web" options="-parameters" />
     </option>
   </component>
 </project>

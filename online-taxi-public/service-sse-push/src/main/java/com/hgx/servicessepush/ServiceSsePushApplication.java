@@ -1,4 +1,4 @@
-package com.mashibing.servicessepush;
+package com.hgx.servicessepush;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
