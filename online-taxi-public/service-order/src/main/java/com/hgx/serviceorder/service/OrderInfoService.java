@@ -18,7 +18,10 @@ import com.hgx.serviceorder.remote.ServiceMapClient;
 import com.hgx.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +56,9 @@ public class OrderInfoService  {
     private ServiceDriverUserClient serviceDriverUserClient;
     @Resource
     private ServiceMapClient serviceMapClient;
+
+    @Autowired
+    RedissonClient redissonClient;
 
     /**
      * 创建订单
@@ -121,7 +127,7 @@ public class OrderInfoService  {
      * 实时订单派单逻辑
      * @param orderInfo
      */
-    public synchronized void  dispatchRealTimeOrder(OrderInfo orderInfo){
+    public void  dispatchRealTimeOrder(OrderInfo orderInfo){
 
         // 搜索的经度和纬度
         String depLatitude = orderInfo.getDepLatitude();
@@ -145,7 +151,7 @@ public class OrderInfoService  {
 
             // 获得终端
             // 解析终端
-//            JSONArray result = JSONArray.fromObject(listResponseResult.getData());
+//            JSONArray re  sult = JSONArray.fromObject(listResponseResult.getData());
 //            for (int j = 0; j < result.size(); j++) {
 //                JSONObject jsonObject = result.getJSONObject(j);
 //                String carIdString = jsonObject.getString("carId");
@@ -171,6 +177,10 @@ public class OrderInfoService  {
                     String driverPhone = orderDriverResponse.getDriverPhone();
                     String licenseId = orderDriverResponse.getLicenseId();
                     String vehicleNo = orderDriverResponse.getVehicleNo();
+                    // 添加锁
+                    String lockKey = (driverId+"").intern();
+                    RLock lock = redissonClient.getLock(lockKey);
+                    lock.lock();
 //                    synchronized ((driverId+"").intern()){
 //                        // 判断司机 是否有进行中的订单
 //                        if (isDriverOrderGoingon(driverId) > 0){
@@ -192,6 +202,7 @@ public class OrderInfoService  {
 
                     // 判断司机 是否有进行中的订单
                     if (isDriverOrderGoingon(driverId) > 0){
+                        lock.unlock();
                         continue ;
                     }
                     // 订单直接匹配司机
@@ -214,6 +225,8 @@ public class OrderInfoService  {
                     orderInfo.setOrderStatus(OrdersConstants.DRIVER_RECEIVE_ORDER);
 
                     orderInfoMapper.updateById(orderInfo);
+
+                    lock.unlock();
                     // 退出，不在进行 司机的查找
                     break radius;
                   }

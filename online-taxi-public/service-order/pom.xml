@@ -61,6 +61,13 @@
             <version>3.4.3.1</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.redisson</groupId>
+            <artifactId>redisson</artifactId>
+            <version>3.17.7</version>
+        </dependency>
+
+
         <!--引入自动生成代码jar包-->
         <dependency>
             <groupId>com.baomidou</groupId>
