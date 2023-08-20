@@ -3,6 +3,7 @@ package com.hgx.serviceorder.controller;
 import com.hgx.internalcomm.dto.OrderInfo;
 import com.hgx.serviceorder.mapper.OrderInfoMapper;
 import com.hgx.serviceorder.service.OrderInfoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,6 +23,9 @@ public class TestController {
     public String test(){
         return "service-order";
     }
+    @Value("${server.port}")
+    String port;
+
 
 
     @Resource
@@ -37,7 +41,7 @@ public class TestController {
      */
     @GetMapping("/test-real-time-order/{orderId}")
     public String dispatchRealTimeOrder(@PathVariable("orderId") long orderId){
-        System.out.println("并发测试：orderId："+orderId);
+        System.out.println("service-order 端口："+ port+" 并发测试：orderId："+orderId);
         OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
         orderInfoService.dispatchRealTimeOrder(orderInfo);
         return "test-real-time-order success";

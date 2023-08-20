@@ -121,7 +121,7 @@ public class OrderInfoService  {
      * 实时订单派单逻辑
      * @param orderInfo
      */
-    public void dispatchRealTimeOrder(OrderInfo orderInfo){
+    public synchronized void  dispatchRealTimeOrder(OrderInfo orderInfo){
 
         // 搜索的经度和纬度
         String depLatitude = orderInfo.getDepLatitude();
@@ -171,42 +171,42 @@ public class OrderInfoService  {
                     String driverPhone = orderDriverResponse.getDriverPhone();
                     String licenseId = orderDriverResponse.getLicenseId();
                     String vehicleNo = orderDriverResponse.getVehicleNo();
-                    synchronized ((driverId+"").intern()){
-                        // 判断司机 是否有进行中的订单
-                        if (isDriverOrderGoingon(driverId) > 0){
-                            continue ;
-                        }
-                        // 订单直接匹配司机
-                        // 查询当前车辆信息
-                        QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
-                        carQueryWrapper.eq("id",carId);
-
-                        // 设置订单中和司机车辆相关的信息
-                        orderInfo.setDriverId(driverId);
-                        orderInfo.setDriverPhone(driverPhone);
-                        orderInfo.setCarId(carId);
-                        // 从地图中来
-                        orderInfo.setReceiveOrderCarLongitude(longitude);
-                        orderInfo.setReceiveOrderCarLatitude(latitude);
-
-
-//                    // 判断司机 是否有进行中的订单
-//                    if (isDriverOrderGoingon(driverId) > 0){
-//                        continue ;
-//                    }
-//                    // 订单直接匹配司机
-//                    // 查询当前车辆信息
-//                    QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
-//                    carQueryWrapper.eq("id",carId);
+//                    synchronized ((driverId+"").intern()){
+//                        // 判断司机 是否有进行中的订单
+//                        if (isDriverOrderGoingon(driverId) > 0){
+//                            continue ;
+//                        }
+//                        // 订单直接匹配司机
+//                        // 查询当前车辆信息
+//                        QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+//                        carQueryWrapper.eq("id",carId);
+//
+//                        // 设置订单中和司机车辆相关的信息
+//                        orderInfo.setDriverId(driverId);
+//                        orderInfo.setDriverPhone(driverPhone);
+//                        orderInfo.setCarId(carId);
+//                        // 从地图中来
+//                        orderInfo.setReceiveOrderCarLongitude(longitude);
+//                        orderInfo.setReceiveOrderCarLatitude(latitude);
 
 
-//                    // 设置订单中和司机车辆相关的信息
-//                    orderInfo.setDriverId(driverId);
-//                    orderInfo.setDriverPhone(driverPhone);
-//                    orderInfo.setCarId(carId);
-//                    // 从地图中来
-//                    orderInfo.setReceiveOrderCarLongitude(longitude);
-//                    orderInfo.setReceiveOrderCarLatitude(latitude);
+                    // 判断司机 是否有进行中的订单
+                    if (isDriverOrderGoingon(driverId) > 0){
+                        continue ;
+                    }
+                    // 订单直接匹配司机
+                    // 查询当前车辆信息
+                    QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+                    carQueryWrapper.eq("id",carId);
+
+
+                    // 设置订单中和司机车辆相关的信息
+                    orderInfo.setDriverId(driverId);
+                    orderInfo.setDriverPhone(driverPhone);
+                    orderInfo.setCarId(carId);
+                    // 从地图中来
+                    orderInfo.setReceiveOrderCarLongitude(longitude);
+                    orderInfo.setReceiveOrderCarLatitude(latitude);
 
                     orderInfo.setReceiveOrderTime(LocalDateTime.now());
                     orderInfo.setLicenseId(licenseId);
@@ -224,7 +224,7 @@ public class OrderInfoService  {
 
             }
         }
-    }
+//    }
 
         // 未优化前的搜索车辆代码
 //        int radius = 2000;
