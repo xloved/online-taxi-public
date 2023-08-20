@@ -23,9 +23,9 @@ public class TerminalResponse {
     /**
      * 经度
      */
-    private Long longitude ;
+    private String longitude ;
     /**
      * 纬度
      */
-    private Long latitude ;
+    private String latitude ;
 }

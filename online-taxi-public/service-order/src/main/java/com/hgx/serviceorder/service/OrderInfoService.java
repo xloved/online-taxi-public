@@ -18,7 +18,6 @@ import com.hgx.serviceorder.remote.ServiceMapClient;
 import com.hgx.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -146,13 +145,20 @@ public class OrderInfoService  {
 
             // 获得终端
             // 解析终端
-            JSONArray result = JSONArray.fromObject(listResponseResult.getData());
-            for (int j = 0; j < result.size(); j++) {
-                JSONObject jsonObject = result.getJSONObject(j);
-                String carIdString = jsonObject.getString("carId");
-                Long carId = Long.parseLong(carIdString);
-                long longitude = jsonObject.getLong("longitude");
-                long latitude = jsonObject.getLong("latitude");
+//            JSONArray result = JSONArray.fromObject(listResponseResult.getData());
+//            for (int j = 0; j < result.size(); j++) {
+//                JSONObject jsonObject = result.getJSONObject(j);
+//                String carIdString = jsonObject.getString("carId");
+//                Long carId = Long.parseLong(carIdString);
+//                long longitude = jsonObject.getLong("longitude");
+//                long latitude = jsonObject.getLong("latitude");
+            List<TerminalResponse> data = listResponseResult.getData();
+            for (int j=0;j<data.size();j++){
+                TerminalResponse terminalResponse = data.get(j);
+                Long carId = terminalResponse.getCarId();
+
+                String longitude = terminalResponse.getLongitude();
+                String latitude = terminalResponse.getLatitude();
                 // 查询是否有对于的可派单司机
                 ResponseResult<OrderDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
                 if(availableDriver.getCode() == CommonStatusEnum.AVAILABLE_DRIVER_EMPTY.getCode()){
@@ -165,24 +171,42 @@ public class OrderInfoService  {
                     String driverPhone = orderDriverResponse.getDriverPhone();
                     String licenseId = orderDriverResponse.getLicenseId();
                     String vehicleNo = orderDriverResponse.getVehicleNo();
+                    synchronized ((driverId+"").intern()){
+                        // 判断司机 是否有进行中的订单
+                        if (isDriverOrderGoingon(driverId) > 0){
+                            continue ;
+                        }
+                        // 订单直接匹配司机
+                        // 查询当前车辆信息
+                        QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+                        carQueryWrapper.eq("id",carId);
 
-                    // 判断司机 是否有进行中的订单
-                    if (isDriverOrderGoingon(driverId) > 0){
-                        continue ;
-                    }
-                    // 订单直接匹配司机
-                    // 查询当前车辆信息
-                    QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
-                    carQueryWrapper.eq("id",carId);
+                        // 设置订单中和司机车辆相关的信息
+                        orderInfo.setDriverId(driverId);
+                        orderInfo.setDriverPhone(driverPhone);
+                        orderInfo.setCarId(carId);
+                        // 从地图中来
+                        orderInfo.setReceiveOrderCarLongitude(longitude);
+                        orderInfo.setReceiveOrderCarLatitude(latitude);
 
 
-                    // 查询当前司机信息
-                    orderInfo.setDriverId(driverId);
-                    orderInfo.setDriverPhone(driverPhone);
-                    orderInfo.setCarId(carId);
-                    // 从地图中来
-                    orderInfo.setReceiveOrderCarLongitude(longitude+"");
-                    orderInfo.setReceiveOrderCarLatitude(latitude+"");
+//                    // 判断司机 是否有进行中的订单
+//                    if (isDriverOrderGoingon(driverId) > 0){
+//                        continue ;
+//                    }
+//                    // 订单直接匹配司机
+//                    // 查询当前车辆信息
+//                    QueryWrapper<Car> carQueryWrapper = new QueryWrapper<>();
+//                    carQueryWrapper.eq("id",carId);
+
+
+//                    // 设置订单中和司机车辆相关的信息
+//                    orderInfo.setDriverId(driverId);
+//                    orderInfo.setDriverPhone(driverPhone);
+//                    orderInfo.setCarId(carId);
+//                    // 从地图中来
+//                    orderInfo.setReceiveOrderCarLongitude(longitude);
+//                    orderInfo.setReceiveOrderCarLatitude(latitude);
 
                     orderInfo.setReceiveOrderTime(LocalDateTime.now());
                     orderInfo.setLicenseId(licenseId);
@@ -192,6 +216,7 @@ public class OrderInfoService  {
                     orderInfoMapper.updateById(orderInfo);
                     // 退出，不在进行 司机的查找
                     break radius;
+                  }
                 }
                 // 根据解析出来的终端，查询车辆信息
                 // 找到符合的车辆，进行派单
@@ -199,6 +224,7 @@ public class OrderInfoService  {
 
             }
         }
+    }
 
         // 未优化前的搜索车辆代码
 //        int radius = 2000;
@@ -216,7 +242,7 @@ public class OrderInfoService  {
 //                }
 //            }
 //        }
-    }
+
 
     /**
      * 判断乘客是否有 业务中的订单
