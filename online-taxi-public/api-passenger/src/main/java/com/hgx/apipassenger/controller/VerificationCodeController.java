@@ -15,7 +15,7 @@ public class VerificationCodeController {
     @Resource
     private VerificationCodeService verificationCodeService;
 
-    @GetMapping("/verification-code")
+    @PostMapping("/verification-code")
     public ResponseResult VerificationCode(@RequestBody VerificationCodeDTO verificationCodeDTO){
 
         String passengerPhone = verificationCodeDTO.getPassengerPhone();//定义接受的手机号码

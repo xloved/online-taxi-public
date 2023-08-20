@@ -10,6 +10,7 @@ import com.hgx.internalcomm.dto.PriceRule;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import com.hgx.internalcomm.request.PriceRuleIsNewRequest;
+import com.hgx.internalcomm.request.PushRequest;
 import com.hgx.internalcomm.response.OrderDriverResponse;
 import com.hgx.internalcomm.response.TerminalResponse;
 import com.hgx.internalcomm.response.TrsearchResponse;
@@ -292,7 +293,13 @@ public class OrderInfoService  {
                     driverContent.put("destLongitude",orderInfo.getDestLongitude());
                     driverContent.put("destLatitude",orderInfo.getDestLatitude());
 
-                    serviceSsePushClient.push(driverId, IdentityConstantEnum.IDENTITY_DRIVER,driverContent.toString());
+                    PushRequest pushRequest = new PushRequest();
+                    pushRequest.setUserId(driverId);
+                    pushRequest.setIdentity(IdentityConstantEnum.IDENTITY_DRIVER);
+                    pushRequest.setContent(driverContent.toString());
+
+//                    serviceSsePushClient.push(driverId, IdentityConstantEnum.IDENTITY_DRIVER,driverContent.toString());
+                    serviceSsePushClient.push(pushRequest);
 
                     // 通知乘客
                     JSONObject passengerContent = new  JSONObject();
@@ -311,7 +318,13 @@ public class OrderInfoService  {
                     passengerContent.put("receiveOrderCarLongitude",orderInfo.getReceiveOrderCarLongitude());
                     passengerContent.put("receiveOrderCarLatitude",orderInfo.getReceiveOrderCarLatitude());
 
-                    serviceSsePushClient.push(orderInfo.getPassengerId(), IdentityConstantEnum.IDENTITY_PASSENGER,passengerContent.toString());
+//                    serviceSsePushClient.push(orderInfo.getPassengerId(), IdentityConstantEnum.IDENTITY_PASSENGER,passengerContent.toString());
+                    PushRequest pushRequest1 = new PushRequest();
+                    pushRequest1.setUserId(orderInfo.getPassengerId());
+                    pushRequest1.setIdentity(IdentityConstantEnum.IDENTITY_PASSENGER);
+                    pushRequest1.setContent(passengerContent.toString());
+
+                    serviceSsePushClient.push(pushRequest1);
 
                     result = 1;
                     lock.unlock();
@@ -634,5 +647,51 @@ public class OrderInfoService  {
 
         orderInfoMapper.updateById(orderInfo);
         return ResponseResult.success();
+    }
+
+    public ResponseResult pushPayInfo(OrdersRequest orderRequest) {
+
+        Long orderId = orderRequest.getOrderId();
+
+        OrderInfo orderInfo = orderInfoMapper.selectById(orderId);
+        orderInfo.setOrderStatus(OrdersConstants.TO_START_PAY);
+        orderInfoMapper.updateById(orderInfo);
+        return ResponseResult.success();
+
+    }
+
+    public ResponseResult<OrderInfo> detail(Long orderId){
+        OrderInfo orderInfo =  orderInfoMapper.selectById(orderId);
+        return ResponseResult.success(orderInfo);
+    }
+
+    public ResponseResult<OrderInfo> current(String phone, String identity){
+        QueryWrapper<OrderInfo> queryWrapper = new QueryWrapper<>();
+
+        if (identity.equals(IdentityConstantEnum.IDENTITY_DRIVER)){
+            queryWrapper.eq("driver_phone",phone);
+
+            queryWrapper.and(wrapper->wrapper
+                    .eq("order_status",OrdersConstants.DRIVER_RECEIVE_ORDER)
+                    .or().eq("order_status",OrdersConstants.DRIVER_TO_PICK_UP_PASSENGER)
+                    .or().eq("order_status",OrdersConstants.DRIVER_ARRIVED_DEPARTURE)
+                    .or().eq("order_status",OrdersConstants.PICK_UP_PASSENGER)
+
+            );
+        }
+        if (identity.equals(IdentityConstantEnum.IDENTITY_PASSENGER)){
+            queryWrapper.eq("passenger_phone",phone);
+            queryWrapper.and(wrapper->wrapper.eq("order_status",OrdersConstants.ORDER_START)
+                    .or().eq("order_status",OrdersConstants.DRIVER_RECEIVE_ORDER)
+                    .or().eq("order_status",OrdersConstants.DRIVER_TO_PICK_UP_PASSENGER)
+                    .or().eq("order_status",OrdersConstants.DRIVER_ARRIVED_DEPARTURE)
+                    .or().eq("order_status",OrdersConstants.PICK_UP_PASSENGER)
+                    .or().eq("order_status",OrdersConstants.PASSENGER_GETOFF)
+                    .or().eq("order_status",OrdersConstants.TO_START_PAY)
+            );
+        }
+
+        OrderInfo orderInfo = orderInfoMapper.selectOne(queryWrapper);
+        return ResponseResult.success(orderInfo);
     }
 }

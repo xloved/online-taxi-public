@@ -40,4 +40,8 @@ public class ApiUserService {
         return serviceDriverUserClients.getDriverCarRelationShip(driverPhone);
 
     }
+
+    public ResponseResult<DriverUserWorkStatus> getWorkStatus(Long driverId){
+        return serviceDriverUserClients.getWorkStatus(driverId);
+    }
 }

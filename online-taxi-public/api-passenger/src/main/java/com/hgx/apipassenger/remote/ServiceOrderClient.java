@@ -1,5 +1,6 @@
 package com.hgx.apipassenger.remote;
 
+import com.hgx.internalcomm.dto.OrderInfo;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -22,4 +23,10 @@ public interface ServiceOrderClient {
 
     @RequestMapping(method = RequestMethod.POST, value = "/order/cancel")
     public ResponseResult cancel(@RequestParam Long orderId , @RequestParam String identity);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/order/detail")
+    public ResponseResult<OrderInfo> detail(@RequestParam Long orderId);
+
+    @RequestMapping(method = RequestMethod.GET, value = "/order/current")
+    public ResponseResult current(@RequestParam String phone ,@RequestParam String identity);
 }

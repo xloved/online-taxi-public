@@ -22,7 +22,7 @@ public class UserService {
         log.info("accessToken为"+accessToken);
         //解析accessToken获取手机号
         TokenResult tokenResult = JwtUtils.checkToken(accessToken);
-        String passengerPhone = tokenResult.getPassengerPhone();
+        String passengerPhone = tokenResult.getPhone();
         log.info("手机号为："+passengerPhone);
         //根据手机号查询用户信息
         ResponseResult<PassengerUser> phone = servicePassengerUserClient.getUserByPhone(passengerPhone);

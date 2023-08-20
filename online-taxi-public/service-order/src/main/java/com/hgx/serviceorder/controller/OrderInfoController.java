@@ -1,14 +1,12 @@
 package com.hgx.serviceorder.controller;
 
 
+import com.hgx.internalcomm.dto.OrderInfo;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import com.hgx.serviceorder.service.OrderInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -106,4 +104,30 @@ public class OrderInfoController {
 
         return orderInfoService.cancel(orderId,identity);
     }
+
+    /**
+     * 司机发起收款
+     * @param orderRequest
+     * @return
+     */
+    @PostMapping("/push-pay-info")
+    public ResponseResult pushPayInfo(@RequestBody OrdersRequest orderRequest){
+        return orderInfoService.pushPayInfo(orderRequest);
+    }
+
+    /**
+     * 订单详情
+     * @param orderId
+     * @return
+     */
+    @GetMapping("/detail")
+    public ResponseResult<OrderInfo> detail(Long orderId){
+        return orderInfoService.detail(orderId);
+    }
+
+    @GetMapping("/current")
+    public ResponseResult current(String phone , String identity){
+        return orderInfoService.current(phone , identity);
+    }
+
 }

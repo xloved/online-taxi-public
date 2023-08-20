@@ -1,21 +1,16 @@
 package com.hgx.apipassenger.interceptor;
 
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.hgx.internalcomm.constant.TokenConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.dto.TokenResult;
 import com.hgx.internalcomm.utils.JwtUtils;
 import com.hgx.internalcomm.utils.RedisPrefixUtils;
-import javafx.print.Printer;
 import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.annotation.Resource;
-import javax.jnlp.SingleInstanceListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
@@ -44,7 +39,7 @@ public class JwtInterceptor implements HandlerInterceptor {
              result = false;
          }else {
              //拼接key
-             String passengerPhone = tokenResult.getPassengerPhone();
+             String passengerPhone = tokenResult.getPhone();
              String identity = tokenResult.getIdentity();
 
              String tokenKey = RedisPrefixUtils.getByToken(passengerPhone, identity, TokenConstantEnum.ACCESS_TOKEN_TYPE);

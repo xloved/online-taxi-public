@@ -39,7 +39,7 @@ public class JwtInterceptor implements HandlerInterceptor {
              result = false;
          }else {
              //拼接key
-             String passengerPhone = tokenResult.getPassengerPhone();
+             String passengerPhone = tokenResult.getPhone();
              String identity = tokenResult.getIdentity();
 
              String tokenKey = RedisPrefixUtils.getByToken(passengerPhone, identity, TokenConstantEnum.ACCESS_TOKEN_TYPE);

@@ -1,6 +1,5 @@
 package com.hgx.apipassenger.service;
 
-import com.hgx.apipassenger.interceptor.JwtInterceptor;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.constant.TokenConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
@@ -8,7 +7,6 @@ import com.hgx.internalcomm.dto.TokenResult;
 import com.hgx.internalcomm.response.TokenResponse;
 import com.hgx.internalcomm.utils.JwtUtils;
 import com.hgx.internalcomm.utils.RedisPrefixUtils;
-import lombok.val;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -33,7 +31,7 @@ public class TokenService {
         if(tokenResult == null){
             return ResponseResult.fail(CommonStatusEnum.TOKEN_ERROR.getCode(),CommonStatusEnum.TOKEN_ERROR.getValue());
         }
-        String passengerPhone = tokenResult.getPassengerPhone();
+        String passengerPhone = tokenResult.getPhone();
         String identity = tokenResult.getIdentity();
         //读取redis中的refreshtoken
         String refreshTokenKey = RedisPrefixUtils.getByToken(passengerPhone, identity, TokenConstantEnum.REFRESH_TOKEN_TYPE);

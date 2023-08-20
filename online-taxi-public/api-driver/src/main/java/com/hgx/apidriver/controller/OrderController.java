@@ -1,10 +1,17 @@
 package com.hgx.apidriver.controller;
 
 import com.hgx.apidriver.service.ApiDriverOrderInfoService;
+import com.hgx.internalcomm.constant.CommonStatusEnum;
+import com.hgx.internalcomm.constant.IdentityConstantEnum;
+import com.hgx.internalcomm.dto.OrderInfo;
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.dto.TokenResult;
 import com.hgx.internalcomm.request.OrdersRequest;
+import com.hgx.internalcomm.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/order")
@@ -59,4 +66,21 @@ public class OrderController {
         return apiDriverOrderInfoService.cancel(orderId);
     }
 
+    @GetMapping("/detail")
+    public ResponseResult<OrderInfo> detail(Long orderId){
+        return apiDriverOrderInfoService.detail(orderId);
+    }
+
+    @GetMapping("/current")
+    public ResponseResult<OrderInfo> currentOrder(HttpServletRequest httpServletRequest){
+        String authorization = httpServletRequest.getHeader("Authorization");
+        TokenResult tokenResult = JwtUtils.parseToken(authorization);
+        String identity = tokenResult.getIdentity();
+        if (!identity.equals(IdentityConstantEnum.IDENTITY_DRIVER)){
+            return ResponseResult.fail(CommonStatusEnum.TOKEN_ERROR.getCode(),CommonStatusEnum.TOKEN_ERROR.getValue());
+        }
+        String phone = tokenResult.getPhone();
+
+        return apiDriverOrderInfoService.currentOrder(phone,IdentityConstantEnum.IDENTITY_DRIVER);
+    }
 }

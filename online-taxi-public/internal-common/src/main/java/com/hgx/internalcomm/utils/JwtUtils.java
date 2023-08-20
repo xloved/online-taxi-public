@@ -64,7 +64,7 @@ public class JwtUtils {
         String passengerPhone  = verify.getClaim(JWT_KEY_PHONE).asString();
         String identity  = verify.getClaim(JWT_KEY_IDENTITY).asString();
         TokenResult tokenResult = new TokenResult();
-        tokenResult.setPassengerPhone(passengerPhone);
+        tokenResult.setPhone(passengerPhone);
         tokenResult.setIdentity(identity);
 
         return tokenResult;
@@ -93,7 +93,7 @@ public class JwtUtils {
          String s = generatorToken("17890653409","1","accessToken");
          System.out.println("生成的token："+s);
         TokenResult tokenResult = parseToken(s);
-        System.out.println("手机号："+tokenResult.getPassengerPhone());
+        System.out.println("手机号："+tokenResult.getPhone());
         System.out.println("ID："+tokenResult.getIdentity());
 
     }

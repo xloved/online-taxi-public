@@ -27,6 +27,9 @@ logging:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: 0
 
 # todo 并发测试环境准备遗留问题
 #spring:

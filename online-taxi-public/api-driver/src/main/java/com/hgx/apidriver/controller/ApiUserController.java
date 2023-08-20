@@ -51,9 +51,14 @@ public class ApiUserController {
 
         String authorization = request.getHeader("Authorization");
         TokenResult tokenResult = JwtUtils.checkToken(authorization);
-        String driverPhone = tokenResult.getPassengerPhone();
+        String driverPhone = tokenResult.getPhone();
 
         return apiUserService.getDriverCarBindingRelationship(driverPhone);
 
+    }
+
+    @GetMapping("/work-status")
+    public ResponseResult<DriverUserWorkStatus> getWorkStatus(Long driverId){
+        return apiUserService.getWorkStatus(driverId);
     }
 }
