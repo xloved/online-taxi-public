@@ -1,9 +1,9 @@
 package com.hgx.tank.ResCollider;
 
-import com.hgx.tank.Bullet;
-import com.hgx.tank.Explode;
+import com.hgx.tank.tank.Bullet;
+import com.hgx.tank.tank.Explode;
 import com.hgx.tank.FMResponsibility.GameObject;
-import com.hgx.tank.Tank;
+import com.hgx.tank.tank.Tank;
 
 /**
  * 子弹坦克碰撞检测

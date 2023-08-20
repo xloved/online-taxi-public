@@ -1,19 +1,19 @@
 package com.hgx.tank.strategy;
 
-import com.hgx.tank.Bullet;
-import com.hgx.tank.Tank;
+import com.hgx.tank.tank.Bullet;
+import com.hgx.tank.tank.Tank;
 
 /**
  * 定义默认的开火方式
  */
 public class DefaultFireStrategy implements FireStrategy{
 
-   /* private DefaultFireStrategy(){};
+    private DefaultFireStrategy(){};
     private static DefaultFireStrategy defaultFireStrategy = new DefaultFireStrategy();
 
     public static DefaultFireStrategy getDefaultFireStrategy(){
         return defaultFireStrategy;
-    }*/
+    }
     //调用默认的开火方式
     @Override
     public void fire(Tank tank) {

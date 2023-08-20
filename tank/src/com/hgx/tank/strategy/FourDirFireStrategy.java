@@ -1,8 +1,8 @@
 package com.hgx.tank.strategy;
 
-import com.hgx.tank.Bullet;
-import com.hgx.tank.Dir;
-import com.hgx.tank.Tank;
+import com.hgx.tank.tank.Bullet;
+import com.hgx.tank.tank.Dir;
+import com.hgx.tank.tank.Tank;
 
 public class FourDirFireStrategy implements FireStrategy{
 

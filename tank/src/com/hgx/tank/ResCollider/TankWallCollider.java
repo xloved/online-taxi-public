@@ -1,9 +1,8 @@
 package com.hgx.tank.ResCollider;
 
-import com.hgx.tank.Bullet;
 import com.hgx.tank.FMResponsibility.GameObject;
-import com.hgx.tank.Tank;
-import com.hgx.tank.Wall;
+import com.hgx.tank.tank.Tank;
+import com.hgx.tank.tank.Wall;
 
 /**
  * 坦克与墙碰撞检测

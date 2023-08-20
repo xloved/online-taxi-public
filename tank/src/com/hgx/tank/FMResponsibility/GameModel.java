@@ -1,13 +1,18 @@
 package com.hgx.tank.FMResponsibility;
 
-import com.hgx.tank.*;
 import com.hgx.tank.ResCollider.ColliderChain;
+import com.hgx.tank.tank.*;
 
 import java.awt.*;
+import java.io.*;
 import java.util.ArrayList;
 
 import java.util.List;
 
+/**
+ * 门面设计模式，中介者模式，责任链模式
+ * 处理类
+ */
 public class GameModel {
     /**
      * 类加载的时候先加载INSTANCE，然后加载静态语句块调用init()创建new Tank
@@ -19,7 +24,7 @@ public class GameModel {
         INSTANCE.init();//使用静态块先加载init方法
     }
 
-    private final List<GameObject> objects = new ArrayList<>();
+    private List<GameObject> objects = new ArrayList<>();
 
     ColliderChain colliderChain = new ColliderChain();
 
@@ -36,7 +41,7 @@ public class GameModel {
     //初始化坦克
     private void init(){
         myTank = new Tank(200, 400, Dir.DOWN, Group.GOOD);//初始化主站坦克
-        int initTankCount = Integer.parseInt((String)PropertyMgr.get("initTankCount"));
+        int initTankCount = Integer.parseInt((String) PropertyMgr.get("initTankCount"));
 
         for(int i = 0; i < initTankCount; i++){
             //初始化敌方Tank new Tank
@@ -91,4 +96,78 @@ public class GameModel {
            this.objects.remove(go);
     }
 
+//    //游戏进度存档
+//    public void save(){
+//        File files = new File("D:/hgx/tank.data");
+//        ObjectOutputStream objectOutputStream = null;
+//        try {
+//            objectOutputStream = new ObjectOutputStream(new FileOutputStream(files));
+//            objectOutputStream.writeObject(myTank);
+//            objectOutputStream.writeObject(objects);
+//
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }finally{
+//            if(objectOutputStream != null){
+//                try {
+//                    objectOutputStream.close();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+//
+//    //还原存档
+//    public void load(){
+//        File files = new File("D:/hgx/tank.data");
+//        ObjectInputStream objectInputStream = null;
+//        try {
+//            objectInputStream = new ObjectInputStream(new FileInputStream(files));
+//            myTank = (Tank) objectInputStream.readObject();
+//            objects = (List) objectInputStream.readObject();
+//            this.objects.remove(objectInputStream);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+public void save() {
+    File f = new File("D:/hgx/tank.data");
+    ObjectOutputStream oos = null;
+    try {
+        oos = new ObjectOutputStream(new FileOutputStream(f));
+        oos.writeObject(myTank);
+        oos.writeObject(objects);
+    } catch (FileNotFoundException e) {
+        e.printStackTrace();
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if(oos != null) {
+            try {
+                oos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+    public void load() {
+        File f = new File("D:/hgx/tank.data");
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(f));
+            myTank = (Tank)ois.readObject();
+            objects = (List)ois.readObject();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 }

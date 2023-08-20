@@ -125,7 +125,23 @@ public class OrderInfoService  {
             orderInfo.setGmtModified(now);
             orderInfoMapper.insert(orderInfo);
             // 派单
-            dispatchRealTimeOrder(orderInfo);
+//            dispatchRealTimeOrder(orderInfo);
+
+        // 定时任务的处理
+        for (int i =0;i<6;i++){
+            // 派单 dispatchRealTimeOrder
+            int result = dispatchRealTimeOrder(orderInfo);
+            if (result == 1){
+                break;
+            }
+            // 等待20s
+            try {
+                Thread.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
         return ResponseResult.success("");
     }
 
@@ -133,7 +149,9 @@ public class OrderInfoService  {
      * 实时订单派单逻辑
      * @param orderInfo
      */
-    public void  dispatchRealTimeOrder(OrderInfo orderInfo){
+    public int  dispatchRealTimeOrder(OrderInfo orderInfo){
+        log.info("循环一次");
+        int result = 0;
 
         // 搜索的经度和纬度
         String depLatitude = orderInfo.getDepLatitude();
@@ -164,6 +182,8 @@ public class OrderInfoService  {
 //                Long carId = Long.parseLong(carIdString);
 //                long longitude = jsonObject.getLong("longitude");
 //                long latitude = jsonObject.getLong("latitude");
+            // 为了测试是否从地图上获取到司机
+//            List<TerminalResponse> data = new ArrayList<>();
             List<TerminalResponse> data = listResponseResult.getData();
             for (int j=0;j<data.size();j++){
                 TerminalResponse terminalResponse = data.get(j);
@@ -246,7 +266,25 @@ public class OrderInfoService  {
 
                     serviceSsePushClient.push(driverId, IdentityConstantEnum.IDENTITY_DRIVER,driverContent.toString());
 
+                    // 通知乘客
+                    JSONObject passengerContent = new  JSONObject();
+                    passengerContent.put("driverId",orderInfo.getDriverId());
+                    passengerContent.put("driverPhone",orderInfo.getDriverPhone());
+                    passengerContent.put("vehicleNo",orderInfo.getVehicleNo());
+                    // 车辆信息，调用车辆服务
+                    ResponseResult<Car> carById = serviceDriverUserClient.getCarById(carId);
+                    Car carRemote = carById.getData();
 
+                    passengerContent.put("brand", carRemote.getBrand());
+                    passengerContent.put("model",carRemote.getModel());
+                    passengerContent.put("vehicleColor",carRemote.getVehicleColor());
+
+                    passengerContent.put("receiveOrderCarLongitude",orderInfo.getReceiveOrderCarLongitude());
+                    passengerContent.put("receiveOrderCarLatitude",orderInfo.getReceiveOrderCarLatitude());
+
+                    serviceSsePushClient.push(orderInfo.getPassengerId(), IdentityConstantEnum.IDENTITY_PASSENGER,passengerContent.toString());
+
+                    result = 1;
                     lock.unlock();
                     // 退出，不在进行 司机的查找
                     break radius;
@@ -257,6 +295,7 @@ public class OrderInfoService  {
                 // 如果派单成功退出循环
 
             }
+            return result;
         }
 //    }
 
