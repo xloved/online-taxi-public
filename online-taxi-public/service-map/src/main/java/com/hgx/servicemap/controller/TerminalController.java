@@ -21,7 +21,7 @@ import java.util.List;
 public class TerminalController {
 
     @Resource
-    private TerminalService terminalSeervice;
+    private TerminalService terminalService;
 
     /**
      * 创建终端
@@ -30,7 +30,7 @@ public class TerminalController {
      */
     @PostMapping("/add")
     public ResponseResult<TerminalResponse> add(String name, String desc){
-        return terminalSeervice.add(name, desc);
+        return terminalService.add(name, desc);
     }
 
     /**
@@ -42,7 +42,19 @@ public class TerminalController {
     @PostMapping("/aroundsearch")
     public ResponseResult<List<TerminalResponse>> aroundsearch(String center, Integer radius){
 
-        return terminalSeervice.aroundsearch(center, radius);
+        return terminalService.aroundsearch(center, radius);
     }
 
+    /**
+     * 轨迹查询
+     * @param tid
+     * @param starttime
+     * @param endtime
+     * @return
+     */
+    @PostMapping("/trsearch")
+    public ResponseResult trsearch(String tid, Long starttime , Long endtime){
+
+        return terminalService.trsearch(tid,starttime,endtime);
+    }
 }

@@ -2,6 +2,7 @@ package com.hgx.servicemap.service;
 
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.TerminalResponse;
+import com.hgx.internalcomm.response.TrsearchResponse;
 import com.hgx.servicemap.remote.TerminalClient;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +40,11 @@ public class TerminalService {
     public ResponseResult<List<TerminalResponse>> aroundsearch(String center, Integer radius){
 
         return terminalClient.aroundsearch(center, radius);
+    }
+
+    public ResponseResult<TrsearchResponse> trsearch(String tid , Long starttime , Long endtime){
+
+        return terminalClient.trsearch(tid,starttime,endtime);
     }
 
 }
