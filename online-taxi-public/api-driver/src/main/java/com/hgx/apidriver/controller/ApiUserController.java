@@ -2,13 +2,14 @@ package com.hgx.apidriver.controller;
 
 import com.hgx.apidriver.service.ApiUserService;
 import com.hgx.internalcomm.dto.DriverUser;
+import com.hgx.internalcomm.dto.DriverUserWorkStatus;
 import com.hgx.internalcomm.dto.ResponseResult;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.hgx.internalcomm.dto.TokenResult;
+import com.hgx.internalcomm.utils.JwtUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @Description 司机端服务
@@ -34,4 +35,25 @@ public class ApiUserController {
         return apiUserService.updateApiUser(driverUser);
     }
 
+    @PostMapping("/driver-user-work-status")
+    public ResponseResult changeWorkStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus){
+
+        return apiUserService.changeWorkStatus(driverUserWorkStatus);
+    }
+
+    /**
+     * 根据司机token查询 司机和车辆绑定关系
+     * @param request
+     * @return
+     */
+    @GetMapping("/driver-car-binding-relationship")
+    public ResponseResult getDriverCarBindingRelationship(HttpServletRequest request){
+
+        String authorization = request.getHeader("Authorization");
+        TokenResult tokenResult = JwtUtils.checkToken(authorization);
+        String driverPhone = tokenResult.getPassengerPhone();
+
+        return apiUserService.getDriverCarBindingRelationship(driverPhone);
+
+    }
 }

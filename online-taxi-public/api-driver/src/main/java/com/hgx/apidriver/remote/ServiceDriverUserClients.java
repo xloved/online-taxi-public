@@ -1,8 +1,6 @@
 package com.hgx.apidriver.remote;
 
-import com.hgx.internalcomm.dto.Car;
-import com.hgx.internalcomm.dto.DriverUser;
-import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.dto.*;
 import com.hgx.internalcomm.response.DriverUserExistsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
@@ -39,4 +37,10 @@ public interface ServiceDriverUserClients {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/user/getCar")
     ResponseResult<Car> getCarById(@RequestParam("carId") Long carId);
+
+    @RequestMapping(method = RequestMethod.POST, value="/driver-user-work-status")
+    public ResponseResult changeWorkStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus);
+
+    @GetMapping("/driver-car-binding-relationship")
+    public ResponseResult<DriverCarBindingRelationship> getDriverCarRelationShip(@RequestParam String driverPhone);
 }

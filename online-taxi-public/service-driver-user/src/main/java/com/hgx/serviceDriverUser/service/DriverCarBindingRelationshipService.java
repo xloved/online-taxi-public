@@ -4,9 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.constant.DriverCarConstants;
 import com.hgx.internalcomm.dto.DriverCarBindingRelationship;
+import com.hgx.internalcomm.dto.DriverUser;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.serviceDriverUser.mapper.DriverCarBindingRelationshipMapper;
+import com.hgx.serviceDriverUser.mapper.DriverUserMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -27,6 +31,9 @@ public class DriverCarBindingRelationshipService  {
 
     @Resource
     private DriverCarBindingRelationshipMapper driverCarBindingRelationshipMap;
+
+    @Autowired
+    DriverUserMapper driverUserMapper;
 
     /**
      * 司机与车辆绑定
@@ -96,5 +103,21 @@ public class DriverCarBindingRelationshipService  {
         driverCarBindingRelationshipMap.updateById(bindingRelationship);
 
         return ResponseResult.success("");
+    }
+
+    public ResponseResult<DriverCarBindingRelationship> getDriverCarRelationShipByDriverPhone(@RequestParam String driverPhone){
+        QueryWrapper<DriverUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("driver_phone",driverPhone);
+
+        DriverUser driverUser = driverUserMapper.selectOne(queryWrapper);
+        Long driverId = driverUser.getId();
+
+        QueryWrapper<DriverCarBindingRelationship> driverCarBindingRelationshipQueryWrapper = new QueryWrapper<>();
+        driverCarBindingRelationshipQueryWrapper.eq("driver_id",driverId);
+        driverCarBindingRelationshipQueryWrapper.eq("bind_state",DriverCarConstants.DRIVER_CAR_BIND);
+
+        DriverCarBindingRelationship driverCarBindingRelationship = driverCarBindingRelationshipMap.selectOne(driverCarBindingRelationshipQueryWrapper);
+        return ResponseResult.success(driverCarBindingRelationship);
+
     }
 }

@@ -4,7 +4,7 @@ package com.hgx.serviceDriverUser.controller;
 import com.hgx.internalcomm.dto.DriverUserWorkStatus;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.serviceDriverUser.service.DriverUserWorkStatusService;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +31,7 @@ public class DriverUserWorkStatusController {
      * @param driverUserWorkStatus
      * @return
      */
-    @PutMapping("/worker-status")
+    @PostMapping("/worker-status")
     public ResponseResult updateWorkerStatus(@RequestBody DriverUserWorkStatus driverUserWorkStatus){
         Long driverId = driverUserWorkStatus.getDriverId();
         Integer workStatus = driverUserWorkStatus.getWorkStatus();

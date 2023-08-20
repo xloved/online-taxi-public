@@ -29,13 +29,13 @@ public class JwtUtils {
     private static final String JWT_KEY_TOKEN_DATE = "tokenDateTime";
 
     //生成token
-    public static String generatorToken(String passengerPhone,String identity,String tokenType){
+    public static String generatorToken(String phone,String identity,String tokenType){
 
         Map<String,String> map  = new HashMap<>();
-        map.put(JWT_KEY_PHONE,passengerPhone);
+        map.put(JWT_KEY_PHONE,phone);
         map.put(JWT_KEY_IDENTITY,identity);
         map.put(JWT_KEY_TOKEN_TYPE,tokenType);
-        System.out.println(passengerPhone);
+//        System.out.println(phone);
          //防止生成的token一样
         map.put(JWT_KEY_TOKEN_DATE,Calendar.getInstance().getTime().toString());
 

@@ -1,13 +1,16 @@
 package com.hgx.serviceDriverUser.controller;
 
 import com.hgx.internalcomm.constant.DriverCarConstants;
+import com.hgx.internalcomm.dto.DriverCarBindingRelationship;
 import com.hgx.internalcomm.dto.DriverUser;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.DriverUserExistsResponse;
 import com.hgx.internalcomm.response.OrderDriverResponse;
+import com.hgx.serviceDriverUser.service.DriverCarBindingRelationshipService;
 import com.hgx.serviceDriverUser.service.DriverUserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -84,5 +87,18 @@ public class DriverUserController {
     @GetMapping("/get-available-driver/{carId}")
     public ResponseResult<OrderDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId){
         return driverUserService.getAvailableDriver(carId);
+    }
+
+    @Autowired
+    DriverCarBindingRelationshipService driverCarBindingRelationshipService;
+
+    /**
+     * 根据司机手机号查询司机和车辆绑定关系
+     * @param driverPhone
+     * @return
+     */
+    @GetMapping("/driver-car-binding-relationship")
+    public ResponseResult<DriverCarBindingRelationship> getDriverCarRelationShip(@RequestParam String driverPhone){
+        return driverCarBindingRelationshipService.getDriverCarRelationShipByDriverPhone(driverPhone);
     }
 }
