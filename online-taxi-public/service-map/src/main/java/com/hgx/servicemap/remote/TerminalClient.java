@@ -104,12 +104,18 @@ public class TerminalClient {
             TerminalResponse terminalResponse = new TerminalResponse();
             JSONObject arrayJSONObject = array.getJSONObject(i);
             String tid = arrayJSONObject.getString("tid");
+            // desc 是carid
             String desc = arrayJSONObject.getString("desc");
             Long carId = Long.parseLong(desc);
 
+            JSONObject location = jsonObject.getJSONObject("location");
+            long longitude = location.getLong("longitude");
+            long latitude = location.getLong("latitude");
 
             terminalResponse.setCarId(carId);
             terminalResponse.setTid(tid);
+            terminalResponse.setLongitude(longitude);
+            terminalResponse.setLatitude(latitude);
             list.add(terminalResponse);
 
         }

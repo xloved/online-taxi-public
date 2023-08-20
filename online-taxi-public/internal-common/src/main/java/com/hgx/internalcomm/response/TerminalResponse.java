@@ -20,4 +20,12 @@ public class TerminalResponse {
      * 车辆ID
      */
     private Long carId;
+    /**
+     * 经度
+     */
+    private Long longitude ;
+    /**
+     * 纬度
+     */
+    private Long latitude ;
 }
