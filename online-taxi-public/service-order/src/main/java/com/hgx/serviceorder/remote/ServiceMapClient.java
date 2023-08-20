@@ -2,6 +2,7 @@ package com.hgx.serviceorder.remote;
 
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.TerminalResponse;
+import com.hgx.internalcomm.response.TrsearchResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -27,4 +28,6 @@ public interface ServiceMapClient {
     @RequestMapping(method = RequestMethod.POST, value = "/terminal/aroundsearch")
     public ResponseResult<List<TerminalResponse>> aroundsearch(@RequestParam String center, @RequestParam Integer radius);
 
+    @RequestMapping(method = RequestMethod.POST, value = "/terminal/trsearch")
+    public ResponseResult<TrsearchResponse> trsearch(@RequestParam String tid, @RequestParam Long starttime, @RequestParam Long endtime);
 }
