@@ -1,6 +1,7 @@
 package com.hgx.apidriver.service;
 
 import com.hgx.apidriver.remote.ServiceOrderClient;
+import com.hgx.internalcomm.constant.IdentityConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,5 +43,9 @@ public class ApiDriverOrderInfoService {
 
     public ResponseResult passengerGetoff(OrdersRequest orderRequest){
         return serviceOrderClient.passengerGetoff(orderRequest);
+    }
+
+    public ResponseResult cancel(Long orderId){
+        return  serviceOrderClient.cancel(orderId, IdentityConstantEnum.IDENTITY_DRIVER);
     }
 }

@@ -1,6 +1,7 @@
 package com.hgx.apipassenger.service;
 
 import com.hgx.apipassenger.remote.ServiceOrderClient;
+import com.hgx.internalcomm.constant.IdentityConstantEnum;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.request.OrdersRequest;
 import org.springframework.stereotype.Service;
@@ -22,5 +23,14 @@ public class OrdersService {
 
         serviceOrderClient.addOrders(ordersRequest);
         return ResponseResult.success();
+    }
+
+    /**
+     * 取消订单
+     * @param orderId
+     * @return
+     */
+    public ResponseResult cancel(Long orderId){
+        return serviceOrderClient.cancel(orderId, IdentityConstantEnum.IDENTITY_PASSENGER);
     }
 }
