@@ -26,6 +26,9 @@
         <module>api-driver</module>
         <module>service-verificationcode</module>
         <module>service-order</module>
+        <module>sse-driver-client-web</module>
+        <module>service-pay</module>
+
     </modules>
     <packaging>pom</packaging>
 
