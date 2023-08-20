@@ -4,6 +4,7 @@ import com.hgx.internalcomm.constant.DriverCarConstants;
 import com.hgx.internalcomm.dto.DriverUser;
 import com.hgx.internalcomm.dto.ResponseResult;
 import com.hgx.internalcomm.response.DriverUserExistsResponse;
+import com.hgx.internalcomm.response.OrderDriverResponse;
 import com.hgx.serviceDriverUser.service.DriverUserService;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -72,5 +73,16 @@ public class DriverUserController {
 
         // 返回响应值
         return ResponseResult.success(response);
+    }
+
+
+    /**
+     * 根据车辆Id查询订单需要的司机信息
+     * @param carId
+     * @return
+     */
+    @GetMapping("/get-available-driver/{carId}")
+    public ResponseResult<OrderDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId){
+        return driverUserService.getAvailableDriver(carId);
     }
 }

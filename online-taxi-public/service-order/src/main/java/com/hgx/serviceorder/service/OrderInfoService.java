@@ -15,6 +15,7 @@ import com.hgx.serviceorder.remote.ServiceMapClient;
 import com.hgx.serviceorder.remote.ServicePriceClient;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -126,18 +127,26 @@ public class OrderInfoService  {
         list.add(2000);
         list.add(4000);
         list.add(5000);
-        ResponseResult<List<TerminalResponse>> aroundsearch = null;
+        // 搜索结果
+        ResponseResult<List<TerminalResponse>> listResponseResult = null;
         for (int i = 0; i < list.size(); i++) {
             Integer radius = list.get(i);
-            aroundsearch = serviceMapClient.aroundsearch(center, radius);
-            log.info("在半径为"+radius+"的范围内，寻找车辆,结果："+ JSONArray.fromObject(aroundsearch.getData()).toString());
+            listResponseResult = serviceMapClient.aroundsearch(center, radius);
+            log.info("在半径为" + radius + "的范围内，寻找车辆,结果：" + JSONArray.fromObject(listResponseResult.getData()).toString());
 
             // 获得终端
             // 解析终端
-            // 根据解析出来的终端，查询车辆信息
-            // 找到符合的车辆，进行派单
-            // 如果派单成功退出循环
+            JSONArray result = JSONArray.fromObject(listResponseResult.getData());
+            for (int j = 0; j < result.size(); j++) {
+                JSONObject jsonObject = result.getJSONObject(j);
+                String carIdString = jsonObject.getString("carId");
+                Long carId = Long.parseLong(carIdString);
 
+                // 根据解析出来的终端，查询车辆信息
+                // 找到符合的车辆，进行派单
+                // 如果派单成功退出循环
+
+            }
         }
 
         // 未优化前的搜索车辆代码

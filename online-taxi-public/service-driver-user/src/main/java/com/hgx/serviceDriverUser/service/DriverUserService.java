@@ -1,12 +1,17 @@
 package com.hgx.serviceDriverUser.service;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.hgx.internalcomm.constant.CommonStatusEnum;
 import com.hgx.internalcomm.constant.DriverCarConstants;
+import com.hgx.internalcomm.dto.DriverCarBindingRelationship;
 import com.hgx.internalcomm.dto.DriverUser;
 import com.hgx.internalcomm.dto.DriverUserWorkStatus;
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.response.OrderDriverResponse;
+import com.hgx.serviceDriverUser.mapper.DriverCarBindingRelationshipMapper;
 import com.hgx.serviceDriverUser.mapper.DriverUserMapper;
 import com.hgx.serviceDriverUser.mapper.DriverUserWorkStatusMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -27,6 +32,8 @@ public class DriverUserService {
     private DriverUserMapper driverUserMapper;
     @Resource
     private DriverUserWorkStatusMapper driverUserWorkStatusMapper;
+    @Autowired
+    DriverCarBindingRelationshipMapper driverCarBindingRelationshipMapper;
 
     /**
      * 插入司机信息，在插入司机信息的同时初始化司机状态
@@ -85,6 +92,43 @@ public class DriverUserService {
         return ResponseResult.success(driverUser);
 
     }
+
+
+    /**
+     * 根据车辆Id查询订单需要的司机信息
+     * @param carId
+     * @return
+     */
+    public ResponseResult<OrderDriverResponse> getAvailableDriver(Long carId){
+        QueryWrapper<DriverCarBindingRelationship> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("car_id",carId);
+        queryWrapper.eq("bind_state",DriverCarConstants.DRIVER_CAR_BIND);
+
+        DriverCarBindingRelationship driverCarBindingRelationship = driverCarBindingRelationshipMapper.selectOne(queryWrapper);
+        Long driverId = driverCarBindingRelationship.getDriverId();
+
+        QueryWrapper<DriverUserWorkStatus> queryWrapper1 = new QueryWrapper<>();
+        queryWrapper1.eq("driver_id",driverId);
+        queryWrapper1.eq("work_status",DriverCarConstants.DRIVER_WORK_STATUS_START);
+
+        DriverUserWorkStatus driverUserWorkStatus = driverUserWorkStatusMapper.selectOne(queryWrapper1);
+        if (null == driverUserWorkStatus){
+            return ResponseResult.fail(CommonStatusEnum.AVAILABLE_DRIVER_EMPTY.getCode(),
+                    CommonStatusEnum.AVAILABLE_DRIVER_EMPTY.getValue());
+        }else {
+
+            QueryWrapper<DriverUser> queryWrapper2 = new QueryWrapper<>();
+            queryWrapper2.eq("id",driverId);
+            DriverUser driverUser = driverUserMapper.selectOne(queryWrapper2);
+            OrderDriverResponse orderDriverResponse = new OrderDriverResponse();
+            orderDriverResponse.setCarId(carId);
+            orderDriverResponse.setDriverId(driverId);
+            orderDriverResponse.setDriverPhone(driverUser.getDriverPhone());
+
+            return ResponseResult.success(orderDriverResponse);
+        }
+    }
+
     /**
      * 测试方法
      * @return
