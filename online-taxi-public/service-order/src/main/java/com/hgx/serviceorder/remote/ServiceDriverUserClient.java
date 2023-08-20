@@ -1,10 +1,9 @@
 package com.hgx.serviceorder.remote;
 
 import com.hgx.internalcomm.dto.ResponseResult;
+import com.hgx.internalcomm.response.OrderDriverResponse;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @Description com.hgx.serviceorder.remote
@@ -22,4 +21,7 @@ public interface ServiceDriverUserClient {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/city-driver/is-alailable-driver")
     ResponseResult<Boolean> isAvailableDriver(@RequestParam String cityCode);
+
+    @GetMapping("/get-available-driver/{carId}")
+    public ResponseResult<OrderDriverResponse> getAvailableDriver(@PathVariable("carId") Long carId);
 }
