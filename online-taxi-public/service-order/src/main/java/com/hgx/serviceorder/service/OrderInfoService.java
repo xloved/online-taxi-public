@@ -194,18 +194,29 @@ public class OrderInfoService  {
 
                 String longitude = terminalResponse.getLongitude();
                 String latitude = terminalResponse.getLatitude();
-                // 查询是否有对于的可派单司机
+                // 查询是否有多于的可派单司机
                 ResponseResult<OrderDriverResponse> availableDriver = serviceDriverUserClient.getAvailableDriver(carId);
                 if(availableDriver.getCode() == CommonStatusEnum.AVAILABLE_DRIVER_EMPTY.getCode()){
                     log.info("没有车辆ID："+carId+",对于的司机");
                     continue;
                 }else {
                     log.info("车辆ID："+carId+"找到了正在出车的司机");
+
                     OrderDriverResponse orderDriverResponse = availableDriver.getData();
                     Long driverId = orderDriverResponse.getDriverId();
                     String driverPhone = orderDriverResponse.getDriverPhone();
                     String licenseId = orderDriverResponse.getLicenseId();
                     String vehicleNo = orderDriverResponse.getVehicleNo();
+
+                    String vehicleTypeFromCar = orderDriverResponse.getVehicleType();
+
+                    // 判断车辆的车型是否符合？
+                    String vehicleType = orderInfo.getVehicleType();
+                    if (!vehicleType.trim().equals(vehicleTypeFromCar.trim())){
+                        System.out.println("车型不符合");
+                        continue ;
+                    }
+
                     // 添加锁
                     String lockKey = (driverId+"").intern();
                     RLock lock = redissonClient.getLock(lockKey);
@@ -487,10 +498,22 @@ public class OrderInfoService  {
         Long endtime = LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
         System.out.println("开始时间："+starttime);
         System.out.println("结束时间："+endtime);
+
+        // 1668078028000l,测试的时候不要跨天
         ResponseResult<TrsearchResponse> trsearch = serviceMapClient.trsearch(carById.getData().getTid(), starttime,endtime);
         TrsearchResponse data = trsearch.getData();
-        orderInfo.setDriveMile(data.getDriveMile());
-        orderInfo.setDriveTime(data.getDriveTime());
+        Long driveMile = data.getDriveMile();
+        Long driveTime = data.getDriveTime();
+
+        orderInfo.setDriveMile(driveMile);
+        orderInfo.setDriveTime(driveTime);
+
+        // 获取价格
+        String address = orderInfo.getAddress();
+        String vehicleType = orderInfo.getVehicleType();
+        ResponseResult<Double> doubleResponseResult = servicePriceClient.calculatePrice(driveMile.intValue(), driveTime.intValue(), address, vehicleType);
+        Double price = doubleResponseResult.getData();
+        orderInfo.setPrice(price);
 
         orderInfoMapper.updateById(orderInfo);
         return ResponseResult.success();

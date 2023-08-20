@@ -25,7 +25,7 @@ import java.util.List;
  **/
 @Service
 @Slf4j
-public class ForecastPriceService {
+public class PriceService {
 
     //注入service-map服务到service-price
     @Resource
@@ -34,7 +34,18 @@ public class ForecastPriceService {
     @Resource
     private PriceRuleMapper priceRuleMapper;
 
-    //获取经纬度，然后调用地图服务计算价格
+
+
+    /**
+     * 计算预估价格,获取经纬度，然后调用地图服务计算价格
+     * @param depLongitude
+     * @param depLatitude
+     * @param destLongitude
+     * @param destLatitude
+     * @param cityCode
+     * @param vehicleType
+     * @return
+     */
     public ResponseResult forecasePrice(String depLongitude, String depLatitude, String destLongitude,
                                         String destLatitude, String cityCode, String vehicleType){
         log.info("出发地经度："+depLongitude);
@@ -83,13 +94,41 @@ public class ForecastPriceService {
     }
 
     /**
+     * 计算实际价格
+     * @param distance
+     * @param duration
+     * @param cityCode
+     * @param vehicleType
+     * @return
+     */
+    public ResponseResult<Double> calculatePrice( Integer distance ,  Integer duration, String cityCode, String vehicleType){
+        // 查询计价规则
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.eq("city_code",cityCode);
+        queryWrapper.eq("vehicle_type",vehicleType);
+        queryWrapper.orderByDesc("fare_version");
+
+        List<PriceRule> priceRules = priceRuleMapper.selectList(queryWrapper);
+        if (priceRules.size() == 0){
+            return ResponseResult.fail(CommonStatusEnum.PRICE_RULE_EMPTY.getCode(),CommonStatusEnum.PRICE_RULE_EMPTY.getValue());
+        }
+
+        PriceRule priceRule = priceRules.get(0);
+
+        log.info("根据距离、时长和计价规则，计算价格");
+
+        double price = getPrice(distance, duration, priceRule);
+        return ResponseResult.success(price);
+    }
+
+    /**
      * 根据距离，时长和计价规则，计算最终价格
      * @param distance
      * @param duration
      * @param priceRule
      * @return
      */
-    private double getPrice(Integer distance, Integer duration, PriceRule priceRule){
+    public double getPrice(Integer distance, Integer duration, PriceRule priceRule){
         double price = 0;
 
 

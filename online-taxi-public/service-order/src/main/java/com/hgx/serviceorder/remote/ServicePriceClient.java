@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * @Description 调用service-price服务
@@ -28,5 +29,8 @@ public interface ServicePriceClient {
     @RequestMapping(method = RequestMethod.POST,value = "/price-rule/if-exits")
     public ResponseResult<Boolean> ifExits(@RequestBody PriceRule priceRule);
 
+    @RequestMapping(method = RequestMethod.POST, value = "/calculate-price")
+    public ResponseResult<Double> calculatePrice(@RequestParam Integer distance , @RequestParam Integer duration,
+                                                 @RequestParam String cityCode, @RequestParam String vehicleType);
 
 }
