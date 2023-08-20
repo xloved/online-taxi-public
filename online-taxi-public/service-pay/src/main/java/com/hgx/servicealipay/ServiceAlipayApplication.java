@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServiceAlipayApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(com.hgx.testalipay.ServiceAlipayApplication.class, args);
+		SpringApplication.run(ServiceAlipayApplication.class, args);
 	}
 
 	@PostMapping("/test")
