@@ -1,4 +1,4 @@
-package com.hgx.testalipay.controller;
+package com.hgx.servicealipay.controller;
 
 import com.alipay.easysdk.factory.Factory;
 import com.alipay.easysdk.payment.page.models.AlipayTradePagePayResponse;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class AlipayController {
 
     @Autowired
-    AlipayService alipayService;
+    private AlipayService alipayService;
 
     @GetMapping("/pay")
     public String pay(String subject,String outTradeNo, String totalAmount){
