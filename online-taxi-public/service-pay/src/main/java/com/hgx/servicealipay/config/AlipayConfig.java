@@ -1,4 +1,4 @@
-package com.hgx.testalipay.config;
+package com.hgx.servicealipay.config;
 
 import com.alipay.easysdk.factory.Factory;
 import com.alipay.easysdk.kernel.Config;

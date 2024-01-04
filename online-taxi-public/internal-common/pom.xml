@@ -3,10 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>online-taxi-public</artifactId>
-        <groupId>com.hgx</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <version>2.4.13</version>
     </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hgx</groupId>
+    <artifactId>internal-common</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -19,6 +30,20 @@
             <artifactId>jsqlparser</artifactId>
             <version>4.3</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!--引入jwt-->
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>3.14.0</version>
+        </dependency>
+
+        <!--引入lombok-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.12</version>
         </dependency>
 
         <dependency>
@@ -45,13 +70,6 @@
 
     </dependencies>
 
-    <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>internal-common</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
 </project>
