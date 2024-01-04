@@ -17,3 +17,4 @@ public interface ServiceVerificationCodeClient {
     ResponseResult<NumberCodeResponse> getNumberCode(@PathVariable("size") int size);
 
 }
+ 
